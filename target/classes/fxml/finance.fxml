@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  finance.fxml – Màn hình Quản lý Tài chính
+  - Không gắn fx:controller để chạy ngay khi chưa có controller con.
+  - Bố cục:
+      TOP:  Bộ lọc (Store, Date range, Type) + nút CRUD/Xuất báo cáo
+      CENTER: Bảng TableView danh sách thu/chi
+      BOTTOM: Tổng hợp (Income/Expense/Balance) + phân trang
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" prefWidth="1000.0" prefHeight="640.0">
+
+    <!-- ===== TOP: Bộ lọc + Hành động ===== -->
+    <top>
+        <VBox style="-fx-padding: 12; -fx-background-color: #fafafa; -fx-border-color: #eaeaea; -fx-border-width: 0 0 1 0;" spacing="8">
+            <children>
+                <HBox spacing="8">
+                    <children>
+                        <Label text="Finance" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 4 8 0 0;"/>
+                        <ComboBox fx:id="storeFilter" promptText="Store" prefWidth="180"/>
+
+                        <!-- Chọn khoảng thời gian -->
+                        <DatePicker fx:id="fromDate" promptText="From"/>
+                        <DatePicker fx:id="toDate" promptText="To"/>
+
+                        <!-- Kiểu giao dịch: All / Income / Expense -->
+                        <ComboBox fx:id="typeFilter" promptText="Type (All/Income/Expense)" prefWidth="220"/>
+
+                        <Button fx:id="applyFilterBtn" text="Apply"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="refreshFinanceBtn" text="Refresh"/>
+                    </children>
+                </HBox>
+
+                <HBox spacing="8">
+                    <children>
+                        <Button fx:id="addReportBtn" text="Add"/>
+                        <Button fx:id="editReportBtn" text="Edit"/>
+                        <Button fx:id="deleteReportBtn" text="Delete"/>
+                        <Button fx:id="exportReportBtn" text="Export" tooltip="Xuất báo cáo (CSV/PDF)"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+
+    <!-- ===== CENTER: Bảng danh sách thu/chi ===== -->
+    <center>
+        <VBox>
+            <children>
+                <TableView fx:id="financeTable" VBox.vgrow="ALWAYS">
+                    <!-- Gợi ý mapping property cho FinanceReport:
+                         - id         : Long / Integer
+                         - storeName  : String
+                         - date       : LocalDate
+                         - type       : String (INCOME / EXPENSE)
+                         - amount     : BigDecimal/Double
+                         - note       : String
+                    -->
+                    <columns>
+                        <TableColumn fx:id="colId"        text="ID"        prefWidth="70"/>
+                        <TableColumn fx:id="colStore"     text="Store"     prefWidth="160"/>
+                        <TableColumn fx:id="colDate"      text="Date"      prefWidth="120"/>
+                        <TableColumn fx:id="colType"      text="Type"      prefWidth="120"/>
+                        <TableColumn fx:id="colAmount"    text="Amount"    prefWidth="120"/>
+                        <TableColumn fx:id="colNote"      text="Note"      prefWidth="260"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No finance records. Click 'Add' to create one."/>
+                    </placeholder>
+                </TableView>
+            </children>
+        </VBox>
+    </center>
+
+    <!-- ===== BOTTOM: Tổng hợp + Phân trang ===== -->
+    <bottom>
+        <VBox style="-fx-padding: 8; -fx-background-color: #f6f6f6; -fx-border-color: #e2e2e2; -fx-border-width: 1 0 0 0;" spacing="6">
+            <children>
+                <HBox spacing="16">
+                    <children>
+                        <Label text="Totals:" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="totalIncomeLbl"  text="Income: 0"/>
+                        <Label fx:id="totalExpenseLbl" text="Expense: 0"/>
+                        <Label fx:id="balanceLbl"      text="Balance: 0"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </children>
+                </HBox>
+                <HBox>
+                    <children>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Pagination fx:id="financePagination" maxPageIndicatorCount="10"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </bottom>
+</BorderPane>

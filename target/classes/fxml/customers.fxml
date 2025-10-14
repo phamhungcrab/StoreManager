@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  customers.fxml – Màn hình Quản lý Khách hàng
+  - Không gắn fx:controller để có thể chạy ngay khi chưa tạo controller con.
+  - Đặt fx:id cho các control quan trọng để sau này MainController (hoặc một
+    CustomersController riêng) có thể lookup và gắn logic.
+  - Bố cục:
+      TOP:  Thanh công cụ (Tìm kiếm + nút CRUD)
+      CENTER: Bảng TableView hiển thị danh sách khách hàng
+      BOTTOM: Thanh trạng thái đơn giản + phân trang
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" prefWidth="1000.0" prefHeight="640.0">
+    <!-- ===== TOP: Thanh công cụ tìm kiếm + CRUD ===== -->
+
+    <top>
+        <HBox spacing="8" style="-fx-padding: 12; -fx-background-color: #fafafa; -fx-border-color: #eaeaea; -fx-border-width: 0 0 1 0;">
+            <children>
+                <Label text="Customers" style="-fx-font-weight: bold; -fx-padding: 4 8 0 0; -fx-font-size: 14;"/>
+
+                <!-- Ô tìm kiếm theo tên/điện thoại/email -->
+                <TextField fx:id="customerSearchField" promptText="Search name / phone / email" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="searchCustomerBtn" text="Search"/>
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Nhóm nút CRUD -->
+                <Button fx:id="addCustomerBtn" text="Add" tooltip="Tạo khách hàng mới"/>
+                <Button fx:id="editCustomerBtn" text="Edit" tooltip="Sửa khách hàng được chọn"/>
+                <Button fx:id="deleteCustomerBtn" text="Delete" tooltip="Xóa khách hàng được chọn"/>
+                <Button fx:id="refreshCustomersBtn" text="Refresh"/>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- ===== CENTER: Bảng dữ liệu khách hàng ===== -->
+
+    <center>
+        <VBox>
+            <children>
+                <TableView fx:id="customersTable" VBox.vgrow="ALWAYS">
+                    <!-- Gợi ý mapping property:
+                         - id            : Long / Integer
+                         - name          : String
+                         - phone         : String
+                         - email         : String
+                         - points        : Integer
+                         - createdAt     : LocalDate/LocalDateTime (format khi render)
+                    -->
+                    <columns>
+                        <TableColumn fx:id="colId"        text="ID"          prefWidth="70"/>
+                        <TableColumn fx:id="colName"      text="Name"        prefWidth="200"/>
+                        <TableColumn fx:id="colPhone"     text="Phone"       prefWidth="140"/>
+                        <TableColumn fx:id="colEmail"     text="Email"       prefWidth="220"/>
+                        <TableColumn fx:id="colPoints"    text="Points"      prefWidth="90"/>
+                        <TableColumn fx:id="colCreatedAt" text="Created At"  prefWidth="140"/>
+                    </columns>
+                    <!-- Nhãn placeholder hiển thị khi chưa có dữ liệu -->
+                    <placeholder>
+                        <Label text="No customers yet. Click 'Add' to create one."/>
+                    </placeholder>
+                </TableView>
+            </children>
+        </VBox>
+    </center>
+
+    <!-- ===== BOTTOM: Trạng thái + Phân trang ===== -->
+
+    <bottom>
+        <HBox spacing="12" style="-fx-padding: 8; -fx-background-color: #f6f6f6; -fx-border-color: #e2e2e2; -fx-border-width: 1 0 0 0;">
+            <children>
+                <Label fx:id="customerStatusLabel" text="0 selected"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Pagination fx:id="customerPagination" maxPageIndicatorCount="10"/>
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

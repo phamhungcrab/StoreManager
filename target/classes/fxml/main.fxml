@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  main.fxml – Khung giao diện chính (JavaFX)
+  - Sử dụng BorderPane: top (Menu), left (Thanh điều hướng), center (vùng nội dung), bottom (status bar)
+  - Controller: com.example.storemanagement.controller.MainController
+  - Vùng center (fx:id=contentArea) sẽ được Controller nạp các màn hình con: customers.fxml, inventory.fxml, finance.fxml
+
+  Lưu ý đường dẫn tài nguyên:
+  - Các FXML con đặt trong: src/main/resources/fxml/
+  - CSS (nếu có) trong:    src/main/resources/css/style.css (được gắn ở Main.java)
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:controller="com.example.storemanagement.controller.MainController"
+            xmlns:fx="http://javafx.com/fxml" prefWidth="1000.0" prefHeight="640.0">
+
+    <!-- Thanh menu trên cùng -->
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu text="File">
+                    <items>
+                        <MenuItem text="Exit" onAction="#exitApp"/>
+                    </items>
+                </Menu>
+                <Menu text="View">
+                    <items>
+                        <MenuItem text="Customers" onAction="#openCustomers"/>
+                        <MenuItem text="Inventory" onAction="#openInventory"/>
+                        <MenuItem text="Finance" onAction="#openFinance"/>
+                    </items>
+                </Menu>
+                <Menu text="Help">
+                    <items>
+                        <MenuItem text="About" onAction="#openAbout"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+
+    <!-- Thanh điều hướng bên trái: các nút chuyển màn hình -->
+    <left>
+        <VBox spacing="8.0" BorderPane.alignment="CENTER_LEFT">
+            <children>
+                <Label text="Navigation" style="-fx-font-weight: bold; -fx-padding: 8 0 0 8;"/>
+                <Button text="Customers" onAction="#openCustomers" maxWidth="Infinity"/>
+                <Button text="Inventory" onAction="#openInventory" maxWidth="Infinity"/>
+                <Button text="Finance" onAction="#openFinance" maxWidth="Infinity"/>
+            </children>
+            <padding>
+                <Insets topRightBottomLeft="12"/>
+            </padding>
+        </VBox>
+    </left>
+
+    <!-- Vùng trung tâm sẽ hiển thị nội dung động -->
+    <center>
+        <StackPane fx:id="contentArea" BorderPane.alignment="CENTER">
+            <!-- Mặc định Controller sẽ hiển thị một màn chào. Nếu muốn, có thể đặt một Label placeholder ở đây. -->
+            <children>
+                <Label text="Loading..." />
+            </children>
+        </StackPane>
+    </center>
+
+    <!-- Thanh trạng thái dưới cùng (status bar) -->
+    <bottom>
+        <HBox spacing="12.0" BorderPane.alignment="CENTER" style="-fx-padding: 8; -fx-background-color: #f6f6f6; -fx-border-color: #e2e2e2; -fx-border-width: 1 0 0 0;">
+            <children>
+                <!-- Nhãn hiển thị thông tin DB (đọc từ Main.getDbProps()) -->
+                <Label fx:id="statusLabel" text="Status: ready"/>
+                <!-- Filler đẩy các phần tử sang trái/phải -->
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Store Management System"/>
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>
