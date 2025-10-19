@@ -16,7 +16,8 @@
 <?import javafx.scene.layout.*?>
 
 <!-- Root layout chính là BorderPane -->
-<BorderPane xmlns:fx="http://javafx.com/fxml" prefWidth="1000.0" prefHeight="640.0">
+<BorderPane fx:controller="com.example.storemanagement.controller.FinanceController"
+    xmlns:fx="http://javafx.com/fxml" prefWidth="1000.0" prefHeight="640.0">
 
     <!-- ===== TOP: Bộ lọc + Các nút hành động ===== -->
     <top>

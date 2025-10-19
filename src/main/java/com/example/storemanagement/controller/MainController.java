@@ -38,7 +38,10 @@ import javafx.scene.Node; // Kiểu tổng quát cho một phần tử UI
 import javafx.scene.Parent; // Gốc UI khi nạp FXML
 import javafx.scene.control.Alert; // Hộp thoại thông báo/cảnh báo
 import javafx.scene.control.Label; // Nhãn hiển thị văn bản
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane; // Vùng chứa xếp chồng, dùng làm contentArea
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class MainController { // Lớp controller gắn với main.fxml
 
@@ -47,6 +50,11 @@ public class MainController { // Lớp controller gắn với main.fxml
     private StackPane contentArea; // vùng hiển thị màn hình con (được đặt fx:id="contentArea" trong main.fxml)
     @FXML
     private Label statusLabel; // nhãn hiển thị thông tin trạng thái (DB, màn hình đang mở, ...)
+    @FXML
+    private MenuItem toggleMusicItem;
+
+    private MediaPlayer mediaPlayer;
+    private boolean musicPlaying = false;
 
     /**
      * Hàm này tự động chạy sau khi FXMLLoader nạp xong FXML.
@@ -54,6 +62,9 @@ public class MainController { // Lớp controller gắn với main.fxml
      */
     @FXML
     public void initialize() { // phương thức lifecycle của JavaFX Controller
+
+        playBackgroundMusic("/audio/music_background.mp3"); // 🔊 tự phát khi khởi động
+
         // Cập nhật status DB (đọc từ Main.getDbProps())
         updateStatusBar(); // hiển thị URL/User của DB trên thanh trạng thái
         // Hiển thị màn hình chào mừng mặc định
@@ -183,5 +194,46 @@ public class MainController { // Lớp controller gắn với main.fxml
         a.setHeaderText(null); // bỏ header cho gọn
         a.setContentText(content); // nội dung thông điệp
         a.show(); // hiển thị (không chặn luồng)
+    }
+
+    private void playBackgroundMusic(String resourcePath) {
+        try {
+            URL resource = getClass().getResource(resourcePath);
+            if (resource == null) {
+                System.err.println("Không tìm thấy file nhạc: " + resourcePath);
+                return;
+            }
+
+            Media media = new Media(resource.toExternalForm());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Loop vô hạn
+            mediaPlayer.setVolume(0.25); // Âm lượng nhẹ
+            mediaPlayer.play();
+            musicPlaying = true;
+
+            if (toggleMusicItem != null)
+                toggleMusicItem.setText("🔊 Tắt nhạc nền");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void onToggleMusic() {
+        if (mediaPlayer == null)
+            return;
+        if (musicPlaying) {
+            mediaPlayer.pause();
+            toggleMusicItem.setText("🔈 Bật nhạc nền");
+        } else {
+            mediaPlayer.play();
+            toggleMusicItem.setText("🔊 Tắt nhạc nền");
+        }
+        musicPlaying = !musicPlaying;
+    }
+
+    public void stopMusic() {
+        if (mediaPlayer != null)
+            mediaPlayer.stop();
     }
 }

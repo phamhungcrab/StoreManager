@@ -75,6 +75,7 @@ public class FinanceController {
     private final int pageSize = 20;
     private int currentPage = 1;
 
+    
     @FXML
     public void initialize() {
         // ComboBox chuẩn bị sẵn

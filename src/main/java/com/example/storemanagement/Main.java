@@ -49,10 +49,12 @@ import javafx.scene.control.Alert; // Lớp nền của mọi ứng dụng JavaF
 import javafx.scene.control.Label; // Tiện ích nạp file FXML thành cây UI
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane; // Gốc của cây UI (root node)
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage; // Cảnh (scene) chứa các node UI
 
 public class Main extends Application { // Khai báo lớp Main kế thừa Application để chạy JavaFX
-
+    private MediaPlayer mediaPlayer;
     // Tên app hiển thị trên cửa sổ
     public static final String APP_NAME = "Quản lý cửa hàng"; // Hằng số tiêu đề cửa sổ
 
@@ -66,6 +68,10 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
 
     @Override // Chú thích cho trình biên dịch biết ta đang ghi đè phương thức từ lớp cha
     public void start(Stage primaryStage) { // JavaFX sẽ truyền vào Stage chính (cửa sổ)
+
+        // 🔊 Gọi hàm phát nhạc nền
+        playBackgroundMusic("/audio/music_background.mp3");
+
         // 1) Đặt tiêu đề cửa sổ
         primaryStage.setTitle(APP_NAME); // Gán tiêu đề cho cửa sổ chính
 
@@ -108,6 +114,31 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
         }
     }
 
+    private void playBackgroundMusic(String resourcePath) {
+        try {
+            URL resource = getClass().getResource(resourcePath);
+            if (resource == null) {
+                System.err.println("Không tìm thấy file nhạc: " + resourcePath);
+                return;
+            }
+
+            Media media = new Media(resource.toExternalForm());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // 🔁 Loop vô hạn
+            mediaPlayer.setVolume(0.9); // Âm lượng 90%
+            mediaPlayer.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+    }
+
     /**
      * Nạp Scene từ main.fxml (nằm trong resources/fxml/main.fxml)
      */
@@ -120,7 +151,8 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
         }
         Parent root = FXMLLoader.load(fxml); // Dùng FXMLLoader để đọc FXML và tạo cây node UI
         Scene scene = new Scene(root); // Gói root node vào một Scene mới
-        // Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/fxml/customers.fxml")));
+        // Scene scene = new
+        // Scene(FXMLLoader.load(getClass().getResource("/fxml/customers.fxml")));
 
         return scene; // Trả về Scene đã tạo
     }

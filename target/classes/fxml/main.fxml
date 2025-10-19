@@ -54,6 +54,7 @@ inventory.fxml, finance.fxml
                         <MenuItem text="Customers" onAction="#openCustomers" />
                         <MenuItem text="Inventory" onAction="#openInventory" />
                         <MenuItem text="Finance" onAction="#openFinance" />
+                        <MenuItem fx:id="toggleMusicItem" text="🔊 Tắt nhạc nền" onAction="#onToggleMusic"/>
                     </items>
                 </Menu>
                 <!-- Menu "Help" chứa About -->
