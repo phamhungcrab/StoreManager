@@ -10,10 +10,14 @@
     <name>demo</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
-
+    <description>Quản lý khách hàng - kho - tài chính (JavaFX + MySQL)</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
+        <!-- JavaFX LTS/Current (23.0.2 ổn với JDK 21) -->
+        <javafx.version>23.0.2</javafx.version>
+        <!-- JUnit 5 -->
+        <junit.jupiter.version>5.10.2</junit.jupiter.version>
     </properties>
 
     <dependencyManagement>
@@ -142,24 +146,13 @@
                     </configuration>
                 </plugin>
 
-                <!-- Compiler plugin -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
-                    <configuration>
-                        <source>21</source>
-                        <target>21</target>
-                    </configuration>
-                </plugin>
-
                 <!-- Exec plugin -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.1.0</version>
                     <configuration>
-                        <mainClass>com.example.mvc.Main</mainClass>
+                        <mainClass>com.example.storemanagement.Main</mainClass>
                     </configuration>
                 </plugin>
 

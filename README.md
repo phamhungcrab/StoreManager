@@ -117,7 +117,7 @@ password=yourpassword
 ### Bước 4: Chạy ứng dụng
 
 ```bash
-mvn clean compile         exec:java
+mvn clean compile
 mvn exec:java -Dexec.mainClass="com.example.storemanagement.Main" -f pom.xml
 ```
 
@@ -150,3 +150,10 @@ mvn exec:java -Dexec.mainClass="com.example.storemanagement.Main" -f pom.xml
 ---
 
 📅 **Tác giả:** Phạm Ngọc Hưng – MSSV: 20235342
+
+
+
+---
+BONUS:
++ dir    (list các file & thư mục ở nơi đứng hiện tại)
++ 
