@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.storemanagement.controller.LoginController"
+            prefWidth="400" prefHeight="300">
+    <children>
+        <Label layoutX="140" layoutY="30" text="ĐĂNG NHẬP" style="-fx-font-size: 18;"/>
+        <TextField fx:id="usernameField" layoutX="100" layoutY="80" promptText="Tên đăng nhập"/>
+        <PasswordField fx:id="passwordField" layoutX="100" layoutY="120" promptText="Mật khẩu"/>
+        <Button text="Đăng nhập" layoutX="150" layoutY="170" onAction="#handleLogin"/>
+
+        <Text layoutX="120" layoutY="230" text="Chưa có tài khoản?" />
+        <Hyperlink text="Đăng ký ngay" layoutX="230" layoutY="216" onAction="#onSwitchToRegister"/>
+    </children>
+</AnchorPane>

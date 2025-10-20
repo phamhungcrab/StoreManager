@@ -86,17 +86,17 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
         // 2) Đọc cấu hình DB (nếu có). Không bắt buộc để chạy UI.
         dbProps = loadDbProperties(); // Nạp db.properties; nếu thiếu vẫn trả về giá trị mặc định
 
-        // 3) Cố gắng nạp giao diện chính từ FXML
-        try { // Bọc trong try-catch để nếu FXML thiếu thì vẫn chạy với UI dự phòng
-            Scene scene = loadMainScene(); // Thử nạp main.fxml thành một Scene
-            attachCssIfPresent(scene, "/css/style.css"); // Nếu có CSS trong classpath thì gắn vào Scene
-            primaryStage.setScene(scene); // Đặt Scene chính cho Stage
-            primaryStage.show(); // Hiển thị cửa sổ ứng dụng
-        } catch (Exception ex) { // Nếu có lỗi (ví dụ thiếu FXML), sẽ vào nhánh này
-            // Nếu FXML hoặc controller chưa sẵn sàng → dựng giao diện dự phòng
-            Scene fallback = buildFallbackScene(ex); // Tạo Scene đơn giản thông báo cần tạo FXML
-            primaryStage.setScene(fallback); // Gán Scene dự phòng vào Stage
-            primaryStage.show(); // Vẫn hiển thị app để dev dễ sửa
+        // 3) nạp giao diện đăng nhập từ FXML
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            primaryStage.setTitle("Đăng nhập hệ thống");
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Không thể tải form đăng nhập: " + e.getMessage());
         }
 
         // 4) (TÙY CHỌN) Kiểm tra kết nối DB khi bạn đã có DBConnection
@@ -142,20 +142,20 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
     /**
      * Nạp Scene từ main.fxml (nằm trong resources/fxml/main.fxml)
      */
-    private Scene loadMainScene() throws Exception { // Phương thức helper để nạp Scene chính từ FXML
-        URL fxml = getResource("/fxml/main.fxml"); // Tìm tài nguyên main.fxml trong classpath
+    // private Scene loadMainScene() throws Exception { // Phương thức helper để nạp Scene chính từ FXML
+    //     URL fxml = getResource("/fxml/main.fxml"); // Tìm tài nguyên main.fxml trong classpath
 
-        if (fxml == null) { // Nếu không tìm thấy URL
-            throw new IllegalStateException("Không tìm thấy /fxml/main.fxml trong resources."); // Ném lỗi để rơi vào
-                                                                                                // catch ở start()
-        }
-        Parent root = FXMLLoader.load(fxml); // Dùng FXMLLoader để đọc FXML và tạo cây node UI
-        Scene scene = new Scene(root); // Gói root node vào một Scene mới
-        // Scene scene = new
-        // Scene(FXMLLoader.load(getClass().getResource("/fxml/customers.fxml")));
+    //     if (fxml == null) { // Nếu không tìm thấy URL
+    //         throw new IllegalStateException("Không tìm thấy /fxml/main.fxml trong resources."); // Ném lỗi để rơi vào
+    //                                                                                             // catch ở start()
+    //     }
+    //     Parent root = FXMLLoader.load(fxml); // Dùng FXMLLoader để đọc FXML và tạo cây node UI
+    //     Scene scene = new Scene(root); // Gói root node vào một Scene mới
+    //     // Scene scene = new
+    //     // Scene(FXMLLoader.load(getClass().getResource("/fxml/customers.fxml")));
 
-        return scene; // Trả về Scene đã tạo
-    }
+    //     return scene; // Trả về Scene đã tạo
+    // }
 
     /**
      * Đọc file cấu hình DB từ classpath: /database/db.properties
@@ -191,13 +191,13 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
     /**
      * Gắn CSS nếu file tồn tại trong classpath.
      */
-    private void attachCssIfPresent(Scene scene, String cssClasspathPath) { // Gắn stylesheet cho Scene nếu có
-        URL css = getResource(cssClasspathPath); // Tìm CSS trong resources theo đường dẫn classpath
-        if (css != null) { // Nếu tìm thấy
-            scene.getStylesheets().add(css.toExternalForm()); // Chuyển URL thành chuỗi và thêm vào danh sách
-                                                              // stylesheets
-        }
-    }
+    // private void attachCssIfPresent(Scene scene, String cssClasspathPath) { // Gắn stylesheet cho Scene nếu có
+    //     URL css = getResource(cssClasspathPath); // Tìm CSS trong resources theo đường dẫn classpath
+    //     if (css != null) { // Nếu tìm thấy
+    //         scene.getStylesheets().add(css.toExternalForm()); // Chuyển URL thành chuỗi và thêm vào danh sách
+    //                                                           // stylesheets
+    //     }
+    // }
 
     /**
      * UI dự phòng khi chưa có FXML/Controller – giúp bạn chạy thử ngay.
