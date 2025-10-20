@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 
 import com.example.storemanagement.dao.DBConnection;
 import com.example.storemanagement.util.PasswordUtils;
+import com.example.storemanagement.util.Session;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,6 +50,9 @@ public class LoginController {
                 String hashed = rs.getString("password");
                 if (PasswordUtils.checkPassword(password, hashed)) {
                     showAlert(AlertType.INFORMATION, "Đăng nhập thành công!");
+                    String role = rs.getString("role");
+                    Session.setUser(rs.getString("username"), role);
+
                     openMainView();
                 } else {
                     showAlert(AlertType.ERROR, "Sai mật khẩu!");
