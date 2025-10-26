@@ -95,6 +95,13 @@ public class MainController { // Lớp controller gắn với main.fxml
         loadContent("/fxml/finance.fxml", "Finance"); // nạp finance.fxml
     }
 
+
+    @FXML
+    public void openOrders(ActionEvent event) { // handler cho "Finance"
+        loadContent("/fxml/orders.fxml", "Orders"); // nạp finance.fxml
+    }
+
+
     /**
      * Hiển thị hộp thoại giới thiệu.
      */

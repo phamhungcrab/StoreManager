@@ -82,6 +82,8 @@ inventory.fxml, finance.fxml
                 <Button text="Inventory" onAction="#openInventory" maxWidth="Infinity" />
                 <!-- Nút mở màn hình Finance -->
                 <Button text="Finance" onAction="#openFinance" maxWidth="Infinity" />
+                <!-- Nút mở màn hình Orders  -->
+                <Button text="Orders" onAction="#openOrders" maxWidth="Infinity" />
             </children>
             <!-- Insets(top,right,bottom,left) = 12 cho cả bốn phía của VBox -->
             <padding>

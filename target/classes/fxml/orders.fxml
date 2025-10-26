@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- UI đơn giản để tạo/chốt đơn hàng -->
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+    fx:controller="com.example.storemanagement.controller.OrderController">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+            <HBox spacing="10">
+                <Label text="Store:" />
+                <ComboBox fx:id="storeBox" prefWidth="240" />
+                <Label text="Customer:" />
+                <ComboBox fx:id="customerBox" prefWidth="240" />
+                <Label text="Discount:" />
+                <TextField fx:id="discountField" promptText="0" prefWidth="120" />
+            </HBox>
+            <HBox spacing="8">
+                <Button fx:id="addItemBtn" text="Add Item" />
+                <Button fx:id="removeItemBtn" text="Remove Item" />
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button fx:id="refreshBtn" text="Recalc" />
+                <Button fx:id="confirmBtn" text="Confirm Order"
+                    style="-fx-background-color: #28a745; -fx-text-fill: white;" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="itemsTable">
+            <columns>
+                <TableColumn fx:id="colSku" text="SKU" prefWidth="160" />
+                <TableColumn fx:id="colName" text="Product" prefWidth="260" />
+                <TableColumn fx:id="colQty" text="Qty" prefWidth="80" />
+                <TableColumn fx:id="colPrice" text="Unit Price" prefWidth="120" />
+                <TableColumn fx:id="colTotal" text="Line Total" prefWidth="140" />
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox spacing="16" alignment="CENTER_RIGHT" styleClass="status-bar">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+            <Label fx:id="statusLbl" text="0 item(s)" />
+            <Pane
+                HBox.hgrow="ALWAYS" />
+            <Label fx:id="subtotalLbl" text="Subtotal: 0"
+                styleClass="title" />
+            <Label fx:id="grandTotalLbl" text="Grand Total: 0"
+                styleClass="title" />
+        </HBox>
+    </bottom>
+</BorderPane>

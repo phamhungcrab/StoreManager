@@ -335,6 +335,55 @@ INSERT INTO finance_reports(store_id, report_date, type, category, amount, note)
  (1, CURDATE(), 'EXPENSE', 'Equipment',   30000.00, 'Sửa chữa kệ'),
  (2, CURDATE(), 'INCOME',  'Sales',       89000.00, 'Doanh thu bán lẻ');
 
+
+
+
+
+
+
+-- 3.1) Bổ sung trạng thái cho orders (giữ mặc định CONFIRMED để tương thích)
+ALTER TABLE orders
+  ADD COLUMN status ENUM('CONFIRMED','PAID','CANCELED','REFUNDED') NOT NULL DEFAULT 'CONFIRMED' AFTER total_amount,
+  ADD COLUMN note VARCHAR(255) NULL AFTER status,
+  ADD COLUMN paid_at TIMESTAMP NULL AFTER note;
+
+-- 3.2) Ledger điểm khách hàng (audit trail điểm tích luỹ)
+CREATE TABLE IF NOT EXISTS points_ledger (
+  id           BIGINT PRIMARY KEY AUTO_INCREMENT,
+  customer_id  BIGINT NOT NULL,
+  order_id     BIGINT NULL,
+  delta        INT   NOT NULL,            -- số điểm +/−
+  reason       VARCHAR(128) NOT NULL,     -- e.g., 'PURCHASE', 'REFUND', 'MANUAL_ADJUST'
+  note         VARCHAR(255),
+  created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_pl_customer FOREIGN KEY (customer_id) REFERENCES customers(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_pl_order    FOREIGN KEY (order_id)    REFERENCES orders(id)    ON UPDATE CASCADE ON DELETE SET NULL,
+  INDEX idx_pl_customer_created (customer_id, created_at)
+) ENGINE=InnoDB;
+
+-- 3.3) Log sự kiện đơn hàng (giúp theo dõi lịch sử mua hàng, debug)
+CREATE TABLE IF NOT EXISTS order_events (
+  id         BIGINT PRIMARY KEY AUTO_INCREMENT,
+  order_id   BIGINT NOT NULL,
+  event_type ENUM('CREATED','CONFIRMED','PAID','CANCELED','REFUNDED','NOTE') NOT NULL,
+  data_json  JSON NULL,                   -- payload tuỳ chọn (sau này tiện phân tích)
+  note       VARCHAR(255) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_oe_order FOREIGN KEY (order_id) REFERENCES orders(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  INDEX idx_oe_order_created (order_id, created_at)
+) ENGINE=InnoDB;
+
+-- 3.4) (Tuỳ chọn) Thêm trường discount cho orders
+ALTER TABLE orders
+  ADD COLUMN discount DECIMAL(12,2) NOT NULL DEFAULT 0.00 AFTER total_amount;
+
+
+
+
+
+
+
+
 COMMIT;
 
 -- =============================================================
