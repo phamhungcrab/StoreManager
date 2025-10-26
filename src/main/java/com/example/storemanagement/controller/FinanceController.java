@@ -24,6 +24,7 @@ import com.example.storemanagement.model.FinanceReport;
 import com.example.storemanagement.service.FinanceService;
 import com.example.storemanagement.util.AlertUtils;
 import com.example.storemanagement.util.DateUtils;
+import com.example.storemanagement.util.Session;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -90,6 +91,14 @@ public class FinanceController {
         colType.setCellValueFactory(cd -> new ReadOnlyStringWrapper(cd.getValue().getType() == null ? "" : cd.getValue().getType().name()));
         colAmount.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>(FinanceReport::getAmount));
         colNote.setCellValueFactory(new ReadOnlyStringWrapperFactory<>(FinanceReport::getNote));
+
+        String role = Session.getRole();
+        if (role == null || !role.equals("admin")) {
+            addReportBtn.setDisable(true);
+            editReportBtn.setDisable(true);
+            deleteReportBtn.setDisable(true);
+            exportReportBtn.setDisable(true);
+        }
 
         // Events
         applyFilterBtn.setOnAction(e -> doSearch(1));

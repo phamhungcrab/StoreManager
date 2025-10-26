@@ -157,6 +157,15 @@ CREATE TABLE finance_reports (
   INDEX idx_fin_store_date (store_id, report_date, type)
 ) ENGINE=InnoDB;
 
+-- 3.8) Tạo bảng người dùng (tuỳ chọn, để quản lý đăng nhập nếu cần)
+CREATE TABLE users (
+  id         INT PRIMARY KEY AUTO_INCREMENT,
+  username   VARCHAR(64)  NOT NULL UNIQUE,
+  password   VARCHAR(128) NOT NULL,  -- lưu hash mật khẩu
+  role       ENUM('admin','user') NOT NULL DEFAULT 'user',
+  created_at TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
 -- =============================================================
 -- 4) TRIGGERS: Đồng bộ hoá tồn kho & tổng tiền đơn hàng
 -- =============================================================

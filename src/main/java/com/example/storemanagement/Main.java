@@ -92,7 +92,7 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
             Scene scene = new Scene(fxmlLoader.load());
             primaryStage.setTitle("Đăng nhập hệ thống");
             primaryStage.setScene(scene);
-            primaryStage.setResizable(false);
+            primaryStage.setResizable(true);
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
