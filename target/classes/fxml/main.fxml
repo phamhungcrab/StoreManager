@@ -19,6 +19,7 @@ inventory.fxml, finance.fxml
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+
 <!-- BorderPane là layout 5 vùng: top/left/center/right/bottom -->
 <!-- fx:controller trỏ tới lớp điều khiển xử lý sự kiện và nạp màn hình con -->
 <!-- xmlns:fx khai báo namespace của JavaFX cho các thuộc tính fx:* -->
@@ -114,7 +115,8 @@ inventory.fxml, finance.fxml
                 trống linh hoạt) -->
                 <Region HBox.hgrow="ALWAYS" />
                 <!-- Nhãn tên ứng dụng hiển thị ở góc phải thanh trạng thái -->
-                <Label text="Store Management System" />
+                <Label fx:id="welcomeLabel" text="Xin chào!" style="-fx-font-size: 18px;"/>
+                <Button fx:id="logoutBtn" text="Đăng xuất" onAction="#handleLogout"/>
             </children>
         </HBox>
     </bottom>
