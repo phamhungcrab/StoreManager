@@ -348,20 +348,98 @@ public class AccountantController {
 
     @FXML
     private void onViewOrderLogs() {
-        // TODO: Implement when OrderEventDAO.getEventsByStore() method is added
-        AlertUtils.showInfo("Chưa hỗ trợ", "Tính năng xem log đơn hàng sẽ được thêm sau.");
+        StoreItem selected = orderLogStoreCombo.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            AlertUtils.showWarning("Chưa chọn cửa hàng", "Vui lòng chọn cửa hàng!");
+            return;
+        }
+
+        LocalDate fromDate = orderLogFromDate.getValue();
+        LocalDate toDate = orderLogToDate.getValue();
+
+        try {
+            var events = orderEventDAO.getEventsByStore(selected.id, fromDate, toDate);
+            orderLogTable.getItems().clear();
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            for (var event : events) {
+                String orderCode = "ORD-" + event.getOrderId();
+                orderLogTable.getItems().add(new OrderLogRow(
+                        event.getCreatedAt().format(dtf),
+                        orderCode,
+                        event.getEventType(),
+                        event.getNote() != null ? event.getNote() : ""));
+            }
+
+            String dateInfo = "";
+            if (fromDate != null && toDate != null) {
+                dateInfo = String.format(" từ %s đến %s", fromDate, toDate);
+            } else if (fromDate != null) {
+                dateInfo = String.format(" từ %s", fromDate);
+            } else if (toDate != null) {
+                dateInfo = String.format(" đến %s", toDate);
+            }
+
+            AlertUtils.showInfo("Thành công",
+                    String.format("Đã tải %d log đơn hàng của %s%s", events.size(), selected.name, dateInfo));
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtils.showError("Lỗi", "Không thể tải log đơn hàng: " + e.getMessage());
+        }
     }
 
     @FXML
     private void onViewInventory() {
-        // TODO: Implement when ProductDAO.getInventorySummary() method is added
-        AlertUtils.showInfo("Chưa hỗ trợ", "Tính năng xem tồn kho sẽ được thêm sau.");
+        StoreItem selected = inventoryStoreCombo.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            AlertUtils.showWarning("Chưa chọn cửa hàng", "Vui lòng chọn cửa hàng!");
+            return;
+        }
+
+        try {
+            var items = productDAO.getInventoryOverview(selected.id, null, null, 1, 1000);
+            inventoryTable.getItems().clear();
+
+            for (var item : items) {
+                inventoryTable.getItems().add(new InventoryRow(
+                        item.storeName,
+                        item.sku,
+                        item.productName,
+                        String.valueOf(item.quantity),
+                        "Cái" // Default unit
+                ));
+            }
+
+            AlertUtils.showInfo("Thành công", String.format("Đã tải %d sản phẩm của %s", items.size(), selected.name));
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtils.showError("Lỗi", "Không thể tải tồn kho: " + e.getMessage());
+        }
     }
 
     @FXML
     private void onViewAllInventory() {
-        // TODO: Implement when ProductDAO.getInventorySummary() method is added
-        AlertUtils.showInfo("Chưa hỗ trợ", "Tính năng xem tồn kho tổng hợp sẽ được thêm sau.");
+        try {
+            // Get inventory for all stores (storeId = null)
+            var items = productDAO.getInventoryOverview(null, null, null, 1, 1000);
+            inventoryTable.getItems().clear();
+
+            for (var item : items) {
+                inventoryTable.getItems().add(new InventoryRow(
+                        item.storeName,
+                        item.sku,
+                        item.productName,
+                        String.valueOf(item.quantity),
+                        "Cái" // Default unit
+                ));
+            }
+
+            AlertUtils.showInfo("Thành công",
+                    String.format("Đã tải tồn kho tổng hợp: %d sản phẩm từ tất cả cửa hàng", items.size()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtils.showError("Lỗi", "Không thể tải tồn kho: " + e.getMessage());
+        }
     }
 
     @FXML
