@@ -17,6 +17,7 @@ import com.example.storemanagement.model.Customer;
 import com.example.storemanagement.service.CustomerService;
 import com.example.storemanagement.util.AlertUtils;
 import com.example.storemanagement.util.DateUtils;
+import com.example.storemanagement.util.Session;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
@@ -76,6 +77,14 @@ public class CustomerController {
 
         // Khi người dùng chọn dòng khác ➜ cập nhật trạng thái
         customersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> updateStatus());
+
+        String role = Session.getRole();    //Kiểm tra vai trò người dùng
+        if (role == null || !role.equals("admin")) {
+            addCustomerBtn.setDisable(true);
+            editCustomerBtn.setDisable(true);
+            deleteCustomerBtn.setDisable(true);
+        }
+        
 
         // Gán hành động cho các nút
         searchCustomerBtn.setOnAction(e -> doSearch(1));              // tìm kiếm mới

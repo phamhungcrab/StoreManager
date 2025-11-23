@@ -36,12 +36,18 @@ import javafx.fxml.FXML; // Chú thích @FXML để inject node/handler từ FXM
 import javafx.fxml.FXMLLoader; // Tiện ích nạp FXML thành cây Node
 import javafx.scene.Node; // Kiểu tổng quát cho một phần tử UI
 import javafx.scene.Parent; // Gốc UI khi nạp FXML
+import javafx.scene.Scene;
 import javafx.scene.control.Alert; // Hộp thoại thông báo/cảnh báo
+import javafx.scene.control.Button;
 import javafx.scene.control.Label; // Nhãn hiển thị văn bản
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane; // Vùng chứa xếp chồng, dùng làm contentArea
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
+
+import com.example.storemanagement.model.User;
+import com.example.storemanagement.util.Session;
 
 public class MainController { // Lớp controller gắn với main.fxml
 
@@ -52,6 +58,8 @@ public class MainController { // Lớp controller gắn với main.fxml
     private Label statusLabel; // nhãn hiển thị thông tin trạng thái (DB, màn hình đang mở, ...)
     @FXML
     private MenuItem toggleMusicItem;
+    @FXML private Label welcomeLabel;
+    @FXML private Button logoutBtn;
 
     private MediaPlayer mediaPlayer;
     private boolean musicPlaying = false;
@@ -69,7 +77,31 @@ public class MainController { // Lớp controller gắn với main.fxml
         updateStatusBar(); // hiển thị URL/User của DB trên thanh trạng thái
         // Hiển thị màn hình chào mừng mặc định
         showWelcome(); // đưa một Label chào mừng vào contentArea để tránh trắng màn hình
+        String username = Session.getUsername();
+        if (username != null) {
+            welcomeLabel.setText("Xin chào, " + username + "!");
+        } else {
+            welcomeLabel.setText("Xin chào, khách!");
+        }
     }
+
+    //Logout và quay lại màn hình đăng nhập
+    @FXML
+    private void handleLogout() {
+        // Xóa session
+        Session.clear();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) logoutBtn.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Đăng nhập");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Mở màn hình Quản lý Khách hàng.
