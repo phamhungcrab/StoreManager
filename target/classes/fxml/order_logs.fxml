@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.example.storemanagement.controller.OrderLogController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <Label text="Nhật ký đơn hàng (Order Logs)" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="logTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+            <TableColumn fx:id="colOrderId" text="Order ID" prefWidth="80" />
+            <TableColumn fx:id="colCustomer" text="Khách hàng" prefWidth="150" />
+            <TableColumn fx:id="colProducts" text="Sản phẩm" prefWidth="250" />
+            <TableColumn fx:id="colTotal" text="Tổng tiền" prefWidth="100" />
+            <TableColumn fx:id="colType" text="Event Type" prefWidth="100" />
+            <TableColumn fx:id="colNote" text="Note" prefWidth="150" />
+            <TableColumn fx:id="colTime" text="Created At" prefWidth="150" />
+        </columns>
+    </TableView>
+</VBox>

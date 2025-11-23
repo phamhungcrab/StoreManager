@@ -55,7 +55,8 @@ inventory.fxml, finance.fxml
                         <MenuItem text="Customers" onAction="#openCustomers" />
                         <MenuItem text="Inventory" onAction="#openInventory" />
                         <MenuItem text="Finance" onAction="#openFinance" />
-                        <MenuItem fx:id="toggleMusicItem" text="🔊 Tắt nhạc nền" onAction="#onToggleMusic"/>
+                        <MenuItem fx:id="toggleMusicItem" text="🔊 Tắt nhạc nền"
+                            onAction="#onToggleMusic" />
                     </items>
                 </Menu>
                 <!-- Menu "Help" chứa About -->
@@ -85,6 +86,8 @@ inventory.fxml, finance.fxml
                 <Button text="Finance" onAction="#openFinance" maxWidth="Infinity" />
                 <!-- Nút mở màn hình Orders  -->
                 <Button text="Orders" onAction="#openOrders" maxWidth="Infinity" />
+                <!-- Nút mở màn hình Order Logs -->
+                <Button text="Order Logs" onAction="#openOrderLogs" maxWidth="Infinity" />
             </children>
             <!-- Insets(top,right,bottom,left) = 12 cho cả bốn phía của VBox -->
             <padding>
@@ -117,8 +120,8 @@ inventory.fxml, finance.fxml
                 trống linh hoạt) -->
                 <Region HBox.hgrow="ALWAYS" />
                 <!-- Nhãn tên ứng dụng hiển thị ở góc phải thanh trạng thái -->
-                <Label fx:id="welcomeLabel" text="Xin chào!" style="-fx-font-size: 18px;"/>
-                <Button fx:id="logoutBtn" text="Đăng xuất" onAction="#handleLogout"/>
+                <Label fx:id="welcomeLabel" text="Xin chào!" style="-fx-font-size: 18px;" />
+                <Button fx:id="logoutBtn" text="Đăng xuất" onAction="#handleLogout" />
             </children>
         </HBox>
     </bottom>

@@ -58,8 +58,10 @@ public class MainController { // Lớp controller gắn với main.fxml
     private Label statusLabel; // nhãn hiển thị thông tin trạng thái (DB, màn hình đang mở, ...)
     @FXML
     private MenuItem toggleMusicItem;
-    @FXML private Label welcomeLabel;
-    @FXML private Button logoutBtn;
+    @FXML
+    private Label welcomeLabel;
+    @FXML
+    private Button logoutBtn;
 
     private MediaPlayer mediaPlayer;
     private boolean musicPlaying = false;
@@ -85,7 +87,7 @@ public class MainController { // Lớp controller gắn với main.fxml
         }
     }
 
-    //Logout và quay lại màn hình đăng nhập
+    // Logout và quay lại màn hình đăng nhập
     @FXML
     private void handleLogout() {
         // Xóa session
@@ -101,7 +103,6 @@ public class MainController { // Lớp controller gắn với main.fxml
             e.printStackTrace();
         }
     }
-
 
     /**
      * Mở màn hình Quản lý Khách hàng.
@@ -127,12 +128,15 @@ public class MainController { // Lớp controller gắn với main.fxml
         loadContent("/fxml/finance.fxml", "Finance"); // nạp finance.fxml
     }
 
-
     @FXML
     public void openOrders(ActionEvent event) { // handler cho "Finance"
         loadContent("/fxml/orders.fxml", "Orders"); // nạp finance.fxml
     }
 
+    @FXML
+    public void openOrderLogs(ActionEvent event) {
+        loadContent("/fxml/order_logs.fxml", "Order Logs");
+    }
 
     /**
      * Hiển thị hộp thoại giới thiệu.
