@@ -1,3 +1,5 @@
+E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\controller\LogisticsController.java
+E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\dao\UserDAO.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\service\OrderService.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\controller\InventoryController.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\model\OrderItem.java
@@ -32,4 +34,5 @@ E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\controlle
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\dao\DBConnection.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\dao\OrderEventDAO.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\model\Product.java
+E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\controller\UserController.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\model\Customer.java

@@ -53,15 +53,29 @@ public class RegisterController {
         // Mã hóa mật khẩu
         String hashed = PasswordUtils.hashPassword(password);
 
+        // Kiểm tra xem có user nào chưa
+        String role = "user";
+        String countSql = "SELECT COUNT(*) FROM users";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+                PreparedStatement ps = conn.prepareStatement(countSql);
+                java.sql.ResultSet rs = ps.executeQuery()) {
+            if (rs.next() && rs.getInt(1) == 0) {
+                role = "admin"; // User đầu tiên là Admin
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Thực hiện ghi dữ liệu vào MySQL
-        String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, username);
             ps.setString(2, email);
             ps.setString(3, hashed);
+            ps.setString(4, role);
             ps.executeUpdate();
 
             showAlert(AlertType.INFORMATION, "Đăng ký thành công!");
@@ -71,7 +85,7 @@ public class RegisterController {
             emailField.clear();
             passwordField.clear();
             confirmPasswordField.clear();
-            
+
             // Chuyển về màn hình đăng nhập
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Scene scene = new Scene(loader.load());
@@ -86,16 +100,16 @@ public class RegisterController {
     }
 
     @FXML
-protected void onSwitchToLogin(ActionEvent event) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-        Scene scene = new Scene(loader.load());
-        Stage stage = (Stage) usernameField.getScene().getWindow();
-        stage.setScene(scene);
-    } catch (IOException e) {
-        e.printStackTrace();
+    protected void onSwitchToLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-}
 
     private void showAlert(AlertType type, String message) {
         Alert alert = new Alert(type);

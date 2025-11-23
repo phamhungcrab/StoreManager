@@ -79,15 +79,24 @@ inventory.fxml, finance.fxml
                 <!-- Nhãn tiêu đề của khung điều hướng; padding để tạo khoảng cách trái -->
                 <Label text="Navigation" style="-fx-font-weight: bold; -fx-padding: 8 0 0 8;" />
                 <!-- Nút mở màn hình Customers; maxWidth=Infinity để nút giãn hết bề ngang -->
-                <Button text="Customers" onAction="#openCustomers" maxWidth="Infinity" />
+                <Button fx:id="btnCustomers" text="Customers" onAction="#openCustomers"
+                    maxWidth="Infinity" />
                 <!-- Nút mở màn hình Inventory -->
-                <Button text="Inventory" onAction="#openInventory" maxWidth="Infinity" />
+                <Button fx:id="btnInventory" text="Inventory" onAction="#openInventory"
+                    maxWidth="Infinity" />
                 <!-- Nút mở màn hình Finance -->
-                <Button text="Finance" onAction="#openFinance" maxWidth="Infinity" />
+                <Button fx:id="btnFinance" text="Finance" onAction="#openFinance"
+                    maxWidth="Infinity" />
                 <!-- Nút mở màn hình Orders  -->
-                <Button text="Orders" onAction="#openOrders" maxWidth="Infinity" />
+                <Button fx:id="btnOrders" text="Orders" onAction="#openOrders" maxWidth="Infinity" />
                 <!-- Nút mở màn hình Order Logs -->
-                <Button text="Order Logs" onAction="#openOrderLogs" maxWidth="Infinity" />
+                <Button fx:id="btnOrderLogs" text="Order Logs" onAction="#openOrderLogs"
+                    maxWidth="Infinity" />
+                <!-- Nút mở màn hình Logistics -->
+                <Button fx:id="btnLogistics" text="Logistics" onAction="#openLogistics"
+                    maxWidth="Infinity" />
+                <!-- Nút mở màn hình Users (Admin) -->
+                <Button fx:id="btnUsers" text="Users" onAction="#openUsers" maxWidth="Infinity" />
             </children>
             <!-- Insets(top,right,bottom,left) = 12 cho cả bốn phía của VBox -->
             <padding>

@@ -189,7 +189,7 @@ public class ProductDAO { // Lớp DAO làm việc với bảng products và vie
             pageSize = 20;
         int offset = (page - 1) * pageSize; // Chuẩn hóa tham số
         StringBuilder sb = new StringBuilder(); // Dùng StringBuilder để ghép SQL theo điều kiện
-        sb.append("SELECT s.id AS store_id, s.code AS store_code, s.name AS store_name, ")
+        sb.append("SELECT s.id AS store_id, s.code AS store_code, s.name AS store_name, s.type AS store_type, ")
                 .append("p.id AS product_id, p.sku, p.name AS product_name, ")
                 .append("sup.name AS supplier_name, p.unit_price, ")
                 .append("i.quantity, i.updated_at ")
@@ -230,6 +230,7 @@ public class ProductDAO { // Lớp DAO làm việc với bảng products và vie
                     o.storeId = rs.getLong("store_id"); // Map cột → trường
                     o.storeCode = rs.getString("store_code");
                     o.storeName = rs.getString("store_name");
+                    o.storeType = rs.getString("store_type"); // Map store_type
                     o.productId = rs.getLong("product_id");
                     o.sku = rs.getString("sku");
                     o.productName = rs.getString("product_name");
@@ -268,6 +269,7 @@ public class ProductDAO { // Lớp DAO làm việc với bảng products và vie
         public long storeId;
         public String storeCode;
         public String storeName;
+        public String storeType; // 🟢 thêm
         public long productId;
         public String sku;
         public String productName;

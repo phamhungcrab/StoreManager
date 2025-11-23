@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.example.storemanagement.controller.UserController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <Label text="User Management (Admin Only)" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colUsername" text="Username" prefWidth="150" />
+            <TableColumn fx:id="colEmail" text="Email" prefWidth="200" />
+            <TableColumn fx:id="colRole" text="Role" prefWidth="100" />
+        </columns>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER_LEFT"
+        style="-fx-background-color: #f9f9f9; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5;">
+        <Label text="Change Role for Selected User:" />
+        <Label fx:id="lblSelectedUser" style="-fx-font-weight: bold;" />
+        <ComboBox fx:id="cbRole" prefWidth="150" />
+        <Button text="Update Role" onAction="#onUpdateRole"
+            style="-fx-base: #2196F3; -fx-text-fill: white;" />
+    </HBox>
+
+</VBox>

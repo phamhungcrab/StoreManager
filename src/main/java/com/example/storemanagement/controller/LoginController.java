@@ -40,7 +40,7 @@ public class LoginController {
         String sql = "SELECT * FROM users WHERE username = ? OR email = ?";
 
         try (Connection conn = DBConnection.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, input);
             ps.setString(2, input);
@@ -51,7 +51,11 @@ public class LoginController {
                 if (PasswordUtils.checkPassword(password, hashed)) {
                     showAlert(AlertType.INFORMATION, "Đăng nhập thành công!");
                     String role = rs.getString("role");
-                    Session.setUser(rs.getString("username"), role);
+                    Long storeId = rs.getLong("store_id");
+                    if (rs.wasNull()) {
+                        storeId = null; // Handle NULL store_id for admin/users without assigned stores
+                    }
+                    Session.setUser(rs.getString("username"), role, storeId);
 
                     openMainView();
                 } else {
