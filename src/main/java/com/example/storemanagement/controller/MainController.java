@@ -50,6 +50,10 @@ public class MainController {
     private Button btnLogistics;
     @FXML
     private Button btnUsers;
+    @FXML
+    private Button btnAccountant;
+    @FXML
+    private Button btnSellerBudget;
 
     private MediaPlayer mediaPlayer;
     private boolean musicPlaying = false;
@@ -113,6 +117,16 @@ public class MainController {
             btnUsers.setVisible(isAdmin);
             btnUsers.setManaged(isAdmin);
         }
+
+        if (btnAccountant != null) {
+            btnAccountant.setVisible(isAdmin || isAccountant);
+            btnAccountant.setManaged(isAdmin || isAccountant);
+        }
+
+        if (btnSellerBudget != null) {
+            btnSellerBudget.setVisible(isAdmin || isSeller);
+            btnSellerBudget.setManaged(isAdmin || isSeller);
+        }
     }
 
     @FXML
@@ -163,6 +177,16 @@ public class MainController {
     @FXML
     public void openUsers(ActionEvent event) {
         loadContent("/fxml/users.fxml", "User Management");
+    }
+
+    @FXML
+    public void openAccountant(ActionEvent event) {
+        loadContent("/fxml/accountant.fxml", "Accountant");
+    }
+
+    @FXML
+    public void openSellerBudget(ActionEvent event) {
+        loadContent("/fxml/seller_budget.fxml", "Seller Budget");
     }
 
     @FXML

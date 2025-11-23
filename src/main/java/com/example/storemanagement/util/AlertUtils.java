@@ -20,7 +20,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 public final class AlertUtils {
-    private AlertUtils() {}
+    private AlertUtils() {
+    }
 
     /** Hiển thị thông báo kiểu Information (không chặn UI). */
     public static void info(String title, String message) {
@@ -69,16 +70,46 @@ public final class AlertUtils {
         return result.get();
     }
 
+    // ── Convenience overloads for controllers (title, message) ────────────────
+    /** Shorthand: showError(title, message) */
+    public static void showError(String title, String message) {
+        error(title, message);
+    }
+
+    /** Shorthand: showInfo(title, message) */
+    public static void showInfo(String title, String message) {
+        info(title, message);
+    }
+
+    /** Shorthand: showWarning(String title, message) */
+    public static void showWarning(String title, String message) {
+        warn(title, message);
+    }
+
     // ── Helpers đảm bảo chạy đúng Thread ─────────────────────────────────────
     private static void runOnFxThread(Runnable task) {
-        if (Platform.isFxApplicationThread()) task.run();
-        else Platform.runLater(task);
+        if (Platform.isFxApplicationThread())
+            task.run();
+        else
+            Platform.runLater(task);
     }
 
     private static void runOnFxThreadAndWait(Runnable task) {
-        if (Platform.isFxApplicationThread()) { task.run(); return; }
+        if (Platform.isFxApplicationThread()) {
+            task.run();
+            return;
+        }
         CountDownLatch latch = new CountDownLatch(1);
-        Platform.runLater(() -> { try { task.run(); } finally { latch.countDown(); } });
-        try { latch.await(); } catch (InterruptedException ignored) {}
+        Platform.runLater(() -> {
+            try {
+                task.run();
+            } finally {
+                latch.countDown();
+            }
+        });
+        try {
+            latch.await();
+        } catch (InterruptedException ignored) {
+        }
     }
 }

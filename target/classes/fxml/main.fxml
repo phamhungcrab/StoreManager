@@ -75,6 +75,9 @@ inventory.fxml, finance.fxml
         <!-- VBox xếp các phần tử theo cột; spacing=8 khoảng cách giữa các con -->
         <!-- BorderPane.alignment căn VBox trong vùng left của BorderPane -->
         <VBox spacing="8.0" BorderPane.alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="8" right="8" bottom="8" left="8" />
+            </padding>
             <children>
                 <!-- Nhãn tiêu đề của khung điều hướng; padding để tạo khoảng cách trái -->
                 <Label text="Navigation" style="-fx-font-weight: bold; -fx-padding: 8 0 0 8;" />
@@ -89,19 +92,17 @@ inventory.fxml, finance.fxml
                     maxWidth="Infinity" />
                 <!-- Nút mở màn hình Orders  -->
                 <Button fx:id="btnOrders" text="Orders" onAction="#openOrders" maxWidth="Infinity" />
-                <!-- Nút mở màn hình Order Logs -->
-                <Button fx:id="btnOrderLogs" text="Order Logs" onAction="#openOrderLogs"
-                    maxWidth="Infinity" />
-                <!-- Nút mở màn hình Logistics -->
-                <Button fx:id="btnLogistics" text="Logistics" onAction="#openLogistics"
-                    maxWidth="Infinity" />
-                <!-- Nút mở màn hình Users (Admin) -->
+                <!-- Nút mở màn hình Accountant (Kế toán) -->
+                <Button fx:id="btnAccountant" text="Accountant" onAction="#openAccountant"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #9b59b6; -fx-text-fill: white;" />
+                <!-- Nút mở màn hình Seller Budget (Quỹ bán hàng) -->
+                <Button fx:id="btnSellerBudget" text="Seller Budget" onAction="#openSellerBudget"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #16a085; -fx-text-fill: white;" />
+                <!-- Nút mở màn hình Users (Admin only) -->
                 <Button fx:id="btnUsers" text="Users" onAction="#openUsers" maxWidth="Infinity" />
             </children>
-            <!-- Insets(top,right,bottom,left) = 12 cho cả bốn phía của VBox -->
-            <padding>
-                <Insets topRightBottomLeft="12" />
-            </padding>
         </VBox>
     </left>
 

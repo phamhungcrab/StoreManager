@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+    fx:controller="com.example.storemanagement.controller.SellerBudgetController"
+    prefWidth="800" prefHeight="600">
+
+    <top>
+        <VBox style="-fx-padding: 20; -fx-background-color: #16a085;">
+            <Label text="Quản lý Quỹ Ngân sách (Seller)"
+                style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
+            <Label fx:id="welcomeLabel"
+                style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
+            <Label fx:id="balanceLabel" text="Quỹ hiện tại: Loading..."
+                style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10 0 0 0;" />
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15" style="-fx-padding: 20;">
+
+            <!-- Expense Recording Form -->
+            <Label text="Ghi nhận Chi tiêu" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+            <GridPane hgap="10" vgap="10">
+                <Label text="Số tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="amountField" promptText="Nhập số tiền" GridPane.columnIndex="1"
+                    GridPane.rowIndex="0" prefWidth="200" />
+                <Label text="VNĐ" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+
+                <Label text="Lý do chi tiêu:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="reasonField" promptText="VD: Thay bóng đèn"
+                    GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="200" />
+
+                <Label text="Ghi chú (tuỳ chọn):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextArea fx:id="noteArea" promptText="Thêm ghi chú chi tiết..."
+                    GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="200" prefHeight="60" />
+            </GridPane>
+
+            <HBox spacing="10" style="-fx-alignment: center-left;">
+                <Button text="Ghi nhận Chi tiêu" onAction="#onRecordExpense"
+                    style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;" />
+                <Button text="Làm mới" onAction="#onClear" />
+            </HBox>
+
+            <Separator />
+
+            <!-- Expense History -->
+            <Label text="Lịch sử Chi tiêu" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+            <HBox spacing="10">
+                <Label text="Từ ngày:" />
+                <DatePicker fx:id="fromDatePicker" prefWidth="130" />
+                <Label text="Đến ngày:" />
+                <DatePicker fx:id="toDatePicker" prefWidth="130" />
+                <Button text="Lọc" onAction="#onFilter" />
+            </HBox>
+
+            <TableView fx:id="expenseTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="Ngày giờ" prefWidth="140" />
+                    <TableColumn text="Số tiền" prefWidth="100" />
+                    <TableColumn text="Lý do" prefWidth="200" />
+                    <TableColumn text="Ghi chú" prefWidth="200" />
+                    <TableColumn text="Người chi" prefWidth="100" />
+                </columns>
+            </TableView>
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-alignment: center-right;">
+            <Button text="Đóng" onAction="#onClose" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

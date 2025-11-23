@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+    fx:controller="com.example.storemanagement.controller.AccountantController"
+    prefWidth="1000" prefHeight="700">
+
+    <top>
+        <VBox style="-fx-padding: 20; -fx-background-color: #2c3e50;">
+            <Label text="Quản lý Tài chính (Kế toán)"
+                style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
+            <Label fx:id="welcomeLabel"
+                style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+
+            <!-- Tab 1: Supplier Debt Management -->
+            <Tab text="Công nợ Nhà cung cấp">
+                <BorderPane>
+                    <top>
+                        <HBox spacing="10" style="-fx-padding: 10;">
+                            <Label text="Nhà cung cấp:" />
+                            <ComboBox fx:id="supplierCombo" prefWidth="200" />
+                            <Button text="Thêm nợ" onAction="#onAddDebt"
+                                style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+                            <Button text="Trả nợ" onAction="#onPayDebt"
+                                style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+                            <Label fx:id="debtBalanceLabel" text="Tổng nợ: 0 VNĐ"
+                                style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+                        </HBox>
+                    </top>
+                    <center>
+                        <TableView fx:id="debtTable">
+                            <columns>
+                                <TableColumn text="Ngày" prefWidth="120" />
+                                <TableColumn text="Loại giao dịch" prefWidth="120" />
+                                <TableColumn text="Số tiền" prefWidth="120" />
+                                <TableColumn text="Ghi chú" prefWidth="250" />
+                                <TableColumn text="Người tạo" prefWidth="100" />
+                            </columns>
+                        </TableView>
+                    </center>
+                </BorderPane>
+            </Tab>
+
+            <!-- Tab 2: Budget Allocation -->
+            <Tab text="Cấp quỹ Cửa hàng">
+                <BorderPane>
+                    <top>
+                        <HBox spacing="10" style="-fx-padding: 10;">
+                            <Label text="Cửa hàng:" />
+                            <ComboBox fx:id="storeCombo" prefWidth="200" />
+                            <Button text="Cấp quỹ" onAction="#onAllocateBudget"
+                                style="-fx-background-color: #3498db; -fx-text-fill: white;" />
+                            <Label fx:id="storeBalanceLabel" text="Quỹ hiện tại: 0 VNĐ"
+                                style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+                        </HBox>
+                    </top>
+                    <center>
+                        <TableView fx:id="allocationTable">
+                            <columns>
+                                <TableColumn text="Ngày" prefWidth="120" />
+                                <TableColumn text="Cửa hàng" prefWidth="150" />
+                                <TableColumn text="Số tiền" prefWidth="120" />
+                                <TableColumn text="Ghi chú" prefWidth="250" />
+                                <TableColumn text="Người cấp" prefWidth="100" />
+                            </columns>
+                        </TableView>
+                    </center>
+                </BorderPane>
+            </Tab>
+
+            <!-- Tab 3: Order Logs -->
+            <Tab text="Log Đơn hàng">
+                <BorderPane>
+                    <top>
+                        <HBox spacing="10" style="-fx-padding: 10;">
+                            <Label text="Cửa hàng:" />
+                            <ComboBox fx:id="orderLogStoreCombo" prefWidth="200" />
+                            <Label text="Từ ngày:" />
+                            <DatePicker fx:id="orderLogFromDate" prefWidth="130" />
+                            <Label text="Đến ngày:" />
+                            <DatePicker fx:id="orderLogToDate" prefWidth="130" />
+                            <Button text="Xem Log" onAction="#onViewOrderLogs" />
+                        </HBox>
+                    </top>
+                    <center>
+                        <TableView fx:id="orderLogTable">
+                            <columns>
+                                <TableColumn text="Thời gian" prefWidth="140" />
+                                <TableColumn text="Mã đơn" prefWidth="100" />
+                                <TableColumn text="Sự kiện" prefWidth="120" />
+                                <TableColumn text="Ghi chú" prefWidth="300" />
+                            </columns>
+                        </TableView>
+                    </center>
+                </BorderPane>
+            </Tab>
+
+            <!-- Tab 4: Inventory Overview -->
+            <Tab text="Tồn kho Tổng hợp">
+                <BorderPane>
+                    <top>
+                        <HBox spacing="10" style="-fx-padding: 10;">
+                            <Label text="Cửa hàng:" />
+                            <ComboBox fx:id="inventoryStoreCombo" prefWidth="200" />
+                            <Button text="Xem tồn kho" onAction="#onViewInventory" />
+                            <Button text="Tất cả cửa hàng" onAction="#onViewAllInventory" />
+                        </HBox>
+                    </top>
+                    <center>
+                        <TableView fx:id="inventoryTable">
+                            <columns>
+                                <TableColumn text="Cửa hàng" prefWidth="150" />
+                                <TableColumn text="SKU" prefWidth="100" />
+                                <TableColumn text="Tên sản phẩm" prefWidth="200" />
+                                <TableColumn text="Số lượng" prefWidth="100" />
+                                <TableColumn text="Đơn vị" prefWidth="80" />
+                            </columns>
+                        </TableView>
+                    </center>
+                </BorderPane>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-alignment: center-right;">
+            <Button text="Đóng" onAction="#onClose" />
+        </HBox>
+    </bottom>
+
+</BorderPane>
