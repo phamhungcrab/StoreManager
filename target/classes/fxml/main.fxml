@@ -49,6 +49,8 @@
                     maxWidth="Infinity" styleClass="md-button-primary" />
                 <Button fx:id="btnOrders" text="Orders" onAction="#openOrders"
                     maxWidth="Infinity" styleClass="md-button-primary" />
+                <Button fx:id="btnOrderLogs" text="Order Logs" onAction="#openOrderLogs"
+                    maxWidth="Infinity" styleClass="md-button-primary" />
                 <Button fx:id="btnLogistics" text="Logistics" onAction="#openLogistics"
                     maxWidth="Infinity" styleClass="md-button-primary" />
                 <Button fx:id="btnAccountant" text="Accountant" onAction="#openAccountant"

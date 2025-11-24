@@ -7,13 +7,15 @@ public class User {
     private String email;
     private String role;
     private Long storeId; // Nullable if admin/logistic/accountant
+    private String storeName;
 
-    public User(String username, String passwordHash, String email, String role, Long storeId) {
+    public User(String username, String passwordHash, String email, String role, Long storeId, String storeName) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.email = email;
         this.role = role;
         this.storeId = storeId;
+        this.storeName = storeName;
     }
 
     // Getters & setters
@@ -39,5 +41,13 @@ public class User {
 
     public void setStoreId(Long storeId) {
         this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }

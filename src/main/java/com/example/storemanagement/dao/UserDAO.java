@@ -12,18 +12,21 @@ public class UserDAO {
 
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT username, email, role, store_id FROM users ORDER BY username";
+        String sql = "SELECT u.username, u.email, u.role, u.store_id, s.name as store_name " +
+                "FROM users u LEFT JOIN stores s ON u.store_id = s.id ORDER BY u.username";
         try (Connection cn = DBConnection.getInstance().getConnection();
                 PreparedStatement ps = cn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Long storeId = rs.getObject("store_id") != null ? rs.getLong("store_id") : null;
+                String storeName = rs.getString("store_name");
                 users.add(new User(
                         rs.getString("username"),
                         "", // password hash hidden
                         rs.getString("email"),
                         rs.getString("role"),
-                        storeId));
+                        storeId,
+                        storeName));
             }
         }
         return users;
@@ -54,19 +57,22 @@ public class UserDAO {
     }
 
     public User getUserByUsername(String username) throws SQLException {
-        String sql = "SELECT username, password, email, role, store_id FROM users WHERE username = ?";
+        String sql = "SELECT u.username, u.password, u.email, u.role, u.store_id, s.name as store_name " +
+                "FROM users u LEFT JOIN stores s ON u.store_id = s.id WHERE u.username = ?";
         try (Connection cn = DBConnection.getInstance().getConnection();
                 PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Long storeId = rs.getObject("store_id") != null ? rs.getLong("store_id") : null;
+                    String storeName = rs.getString("store_name");
                     return new User(
                             rs.getString("username"),
                             rs.getString("password"),
                             rs.getString("email"),
                             rs.getString("role"),
-                            storeId);
+                            storeId,
+                            storeName);
                 }
             }
         }

@@ -53,8 +53,40 @@ public class LoginController {
                     String role = rs.getString("role");
                     Long storeId = rs.getLong("store_id");
                     if (rs.wasNull()) {
-                        storeId = null; // Handle NULL store_id for admin/users without assigned stores
+                        storeId = null;
                     }
+
+                    // Auto-assign store if missing
+                    if (storeId == null) {
+                        String findStoreSql = "SELECT id FROM stores WHERE type = 'RETAIL' LIMIT 1";
+                        try (PreparedStatement psStore = conn.prepareStatement(findStoreSql);
+                                ResultSet rsStore = psStore.executeQuery()) {
+                            if (rsStore.next()) {
+                                storeId = rsStore.getLong("id");
+                            } else {
+                                // Fallback to any store
+                                try (PreparedStatement psAny = conn.prepareStatement("SELECT id FROM stores LIMIT 1");
+                                        ResultSet rsAny = psAny.executeQuery()) {
+                                    if (rsAny.next()) {
+                                        storeId = rsAny.getLong("id");
+                                    }
+                                }
+                            }
+                        }
+
+                        // Update user record if we found a store
+                        if (storeId != null) {
+                            String updateSql = "UPDATE users SET store_id = ? WHERE username = ?";
+                            try (PreparedStatement psUpdate = conn.prepareStatement(updateSql)) {
+                                psUpdate.setLong(1, storeId);
+                                psUpdate.setString(2, rs.getString("username"));
+                                psUpdate.executeUpdate();
+                                System.out.println(
+                                        "Auto-assigned store " + storeId + " to user " + rs.getString("username"));
+                            }
+                        }
+                    }
+
                     Session.setUser(rs.getString("username"), role, storeId);
 
                     openMainView();

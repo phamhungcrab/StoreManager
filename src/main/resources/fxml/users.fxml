@@ -22,16 +22,22 @@
             <TableColumn fx:id="colUsername" text="Username" prefWidth="150" />
             <TableColumn fx:id="colEmail" text="Email" prefWidth="200" />
             <TableColumn fx:id="colRole" text="Role" prefWidth="100" />
+            <TableColumn fx:id="colStore" text="Store" prefWidth="150" />
         </columns>
     </TableView>
 
     <HBox spacing="10" alignment="CENTER_LEFT"
         style="-fx-background-color: #f9f9f9; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5;">
-        <Label text="Change Role for Selected User:" />
+        <Label text="Change Role:" />
         <Label fx:id="lblSelectedUser" style="-fx-font-weight: bold;" />
-        <ComboBox fx:id="cbRole" prefWidth="150" />
+        <ComboBox fx:id="cbRole" prefWidth="120" promptText="Select Role" />
         <Button text="Update Role" onAction="#onUpdateRole"
             style="-fx-base: #2196F3; -fx-text-fill: white;" />
+
+        <Label text=" | Assign Store:" />
+        <ComboBox fx:id="cbStore" prefWidth="150" promptText="Select Store" />
+        <Button text="Assign Store" onAction="#onAssignStore"
+            style="-fx-base: #4CAF50; -fx-text-fill: white;" />
     </HBox>
 
 </VBox>
