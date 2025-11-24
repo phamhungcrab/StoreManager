@@ -3,79 +3,43 @@ package com.example.storemanagement;
 /*
  * =============================================================
  *  Store Management System – Java + MySQL (no login for now)
- *  Main.java – Điểm khởi chạy JavaFX, nạp FXML chính, đọc db.properties
- *
- *
- *  Thư mục liên quan (theo README):
- *  src/main/resources/
- *    ├─ fxml/main.fxml            ← Giao diện khung chính (controller: MainController)
- *    ├─ fxml/customers.fxml       ← Màn hình Khách hàng
- *    ├─ fxml/inventory.fxml       ← Màn hình Kho hàng
- *    ├─ fxml/finance.fxml         ← Màn hình Tài chính
- *    ├─ css/style.css             ← CSS cho UI (tùy chọn)
- *    └─ database/db.properties    ← Thông tin kết nối MySQL
- *
- *  Cách chạy (Maven):
- *  mvn clean compile
- *  mvn exec:java -Dexec.mainClass="com.example.storemanagement.Main"
- *
- *  Nếu dùng JavaFX SDK độc lập (không dùng BOM), VM Options cần:
- *    --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml
- *  (Trên macOS/Linux dùng $PATH_TO_FX)
- *
- *  Gợi ý kiến trúc:
- *  - Controller: com.example.storemanagement.controller.*
- *  - Service:    com.example.storemanagement.service.*
- *  - DAO:        com.example.storemanagement.dao.* (JDBC → MySQL)
- *  - Model:      com.example.storemanagement.model.*
- *  - Util:       com.example.storemanagement.util.*
- *
- *  Ghi chú:
- *  - File này **không** gọi trực tiếp DAO/Service để đảm bảo compile chạy được
- *    ngay cả khi bạn chưa tạo xong các lớp còn lại. Phần "kiểm tra kết nối DB"
- *    có ví dụ nhưng được COMMENT lại. Bạn mở comment khi đã tạo DBConnection.
+ *  Main.java – Entry point for JavaFX, loads FXML, reads db.properties
  * =============================================================
  */
-// 1️⃣ Thêm import:
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader; // Import lớp InputStream để đọc file từ classpath
-import javafx.scene.Parent; // Import URL để tham chiếu tài nguyên (FXML/CSS) trong classpath
-import javafx.scene.Scene; // Import Properties để nạp cấu hình từ db.properties
-import javafx.scene.control.Alert; // Lớp nền của mọi ứng dụng JavaFX
-import javafx.scene.control.Label; // Tiện ích nạp file FXML thành cây UI
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane; // Gốc của cây UI (root node)
+import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage; // Cảnh (scene) chứa các node UI
+import javafx.stage.Stage;
 
-public class Main extends Application { // Khai báo lớp Main kế thừa Application để chạy JavaFX
+public class Main extends Application {
     private MediaPlayer mediaPlayer;
-    // Tên app hiển thị trên cửa sổ
-    public static final String APP_NAME = "Quản lý cửa hàng"; // Hằng số tiêu đề cửa sổ
+    public static final String APP_NAME = "Quản lý cửa hàng";
+    private static Properties dbProps;
 
-    // Thuộc tính CSDL đọc từ resources/database/db.properties
-    private static Properties dbProps; // Biến tĩnh giữ cấu hình DB để dùng chung
-
-    public static void main(String[] args) { // Hàm main tiêu chuẩn của Java
-        // Điểm vào chuẩn JavaFX – sẽ gọi start(Stage)
-        launch(args); // Gọi launch() để khởi động runtime JavaFX, sau đó gọi start()
+    public static void main(String[] args) {
+        launch(args);
     }
 
-    @Override // Chú thích cho trình biên dịch biết ta đang ghi đè phương thức từ lớp cha
-    public void start(Stage primaryStage) { // JavaFX sẽ truyền vào Stage chính (cửa sổ)
-
-        // 🔊 Gọi hàm phát nhạc nền
+    @Override
+    public void start(Stage primaryStage) {
+        // Play background music
         playBackgroundMusic("/audio/music_background.mp3");
 
-        // 1) Đặt tiêu đề cửa sổ
-        primaryStage.setTitle(APP_NAME); // Gán tiêu đề cho cửa sổ chính
+        // Set window title
+        primaryStage.setTitle(APP_NAME);
 
-        // 2️⃣ Nạp icon từ resources và gắn vào cửa sổ
+        // Load and set window icon
         try {
             Image icon = new Image(getClass().getResourceAsStream("/images/logostb.jpeg"));
             primaryStage.getIcons().add(icon);
@@ -83,34 +47,36 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
             System.err.println("⚠️ Không tìm thấy /images/logostb.jpeg: " + e.getMessage());
         }
 
-        // 2) Đọc cấu hình DB (nếu có). Không bắt buộc để chạy UI.
-        dbProps = loadDbProperties(); // Nạp db.properties; nếu thiếu vẫn trả về giá trị mặc định
+        // Load DB properties (optional)
+        dbProps = loadDbProperties();
 
-        // 3) nạp giao diện đăng nhập từ FXML
+        // Optional DB connection test (requires DBConnection class)
+        try {
+            var conn = com.example.storemanagement.dao.DBConnection.getInstance().getConnection();
+            if (conn != null && !conn.isClosed()) {
+                info("Kết nối MySQL thành công: " + dbProps.getProperty("url", "(chưa thiết lập)"));
+            }
+        } catch (Exception e) {
+            warn("Không thể kết nối MySQL. Kiểm tra db.properties & MySQL service.\n" + e.getMessage());
+        }
+
+        // Load login UI and apply CSS
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
-            primaryStage.setTitle("Đăng nhập hệ thống");
+            URL cssUrl = getClass().getResource("/css/style.css");
+            if (cssUrl != null) {
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+                System.out.println("✅ Material Design CSS loaded for login scene");
+            } else {
+                System.err.println("⚠️ Không tìm thấy /css/style.css");
+            }
             primaryStage.setScene(scene);
             primaryStage.setResizable(true);
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Không thể tải form đăng nhập: " + e.getMessage());
-        }
-
-        // 4) (TÙY CHỌN) Kiểm tra kết nối DB khi bạn đã có DBConnection
-        // → BỎ COMMENT sau khi tạo lớp dao.DBConnection và MySQL Connector
-        try {
-            var conn = com.example.storemanagement.dao.DBConnection.getInstance().getConnection(); // Lấy kết nối DB từ
-                                                                                                   // singleton
-            if (conn != null && !conn.isClosed()) { // Kiểm tra kết nối hợp lệ
-                info("Kết nối MySQL thành công: " + dbProps.getProperty("url", "(chưa thiết lập)")); // Báo thông tin
-                                                                                                     // thành công
-            }
-        } catch (Exception e) {
-            warn("Không thể kết nối MySQL. Kiểm tra db.properties & MySQL service.\n" + e.getMessage()); // Cảnh báo khi
-                                                                                                         // kết nối lỗi
         }
     }
 
@@ -121,11 +87,10 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
                 System.err.println("Không tìm thấy file nhạc: " + resourcePath);
                 return;
             }
-
             Media media = new Media(resource.toExternalForm());
             mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // 🔁 Loop vô hạn
-            mediaPlayer.setVolume(0.9); // Âm lượng 90%
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.setVolume(0.9);
             mediaPlayer.play();
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,115 +104,45 @@ public class Main extends Application { // Khai báo lớp Main kế thừa Appl
         }
     }
 
-    /**
-     * Nạp Scene từ main.fxml (nằm trong resources/fxml/main.fxml)
-     */
-    // private Scene loadMainScene() throws Exception { // Phương thức helper để nạp Scene chính từ FXML
-    //     URL fxml = getResource("/fxml/main.fxml"); // Tìm tài nguyên main.fxml trong classpath
-
-    //     if (fxml == null) { // Nếu không tìm thấy URL
-    //         throw new IllegalStateException("Không tìm thấy /fxml/main.fxml trong resources."); // Ném lỗi để rơi vào
-    //                                                                                             // catch ở start()
-    //     }
-    //     Parent root = FXMLLoader.load(fxml); // Dùng FXMLLoader để đọc FXML và tạo cây node UI
-    //     Scene scene = new Scene(root); // Gói root node vào một Scene mới
-    //     // Scene scene = new
-    //     // Scene(FXMLLoader.load(getClass().getResource("/fxml/customers.fxml")));
-
-    //     return scene; // Trả về Scene đã tạo
-    // }
-
-    /**
-     * Đọc file cấu hình DB từ classpath: /database/db.properties
-     * Trả về Properties rỗng nếu không tìm thấy để không chặn việc chạy UI.
-     */
-    private Properties loadDbProperties() { // Phương thức helper nạp cấu hình DB an toàn
-        Properties props = new Properties(); // Tạo đối tượng Properties trống
-        String path = "/database/db.properties"; // Đường dẫn file cấu hình trong resources
-        try (InputStream in = getResourceAsStream(path)) { // Mở luồng đọc file qua classpath (tự đóng nhờ
-                                                           // try-with-resources)
-            if (in != null) { // Nếu tìm thấy file
-                props.load(in); // Nạp các cặp key=value vào đối tượng Properties
-                // info("Finded path for properties. \n");
-            } else { // Nếu không có file trong resources
-                warn("Không tìm thấy " + path + ". Sẽ dùng giá trị mặc định."); // Cảnh báo nhưng không dừng chương
-                                                                                // trình
+    /** Load DB properties from classpath */
+    private Properties loadDbProperties() {
+        Properties props = new Properties();
+        String path = "/database/db.properties";
+        try (InputStream in = getClass().getResourceAsStream(path)) {
+            if (in != null) {
+                props.load(in);
+            } else {
+                warn("Không tìm thấy " + path + ". Sẽ dùng giá trị mặc định.");
             }
-        } catch (Exception e) { // Bắt mọi lỗi IO để không làm crash UI
-            warn("Lỗi đọc " + path + ": " + e.getMessage()); // Thông báo lỗi đọc file
+        } catch (Exception e) {
+            warn("Lỗi đọc " + path + ": " + e.getMessage());
         }
-
-        // Giá trị mặc định an toàn (không kết nối thật)
-        // info("manual connection \n");
-        // props.putIfAbsent("url", "jdbc:mysql://localhost:3306/store_management"); //
-        // Nếu chưa có key url thì đặt mặc định
-        // props.putIfAbsent("user", "root"); // Mặc định user root (có thể khác máy
-        // bạn)
-        // props.putIfAbsent("password", "aaaa"); // Mặc định password mẫu (hãy đổi
-        // trong db.properties)
-        return props; // Trả về Properties (có thể là file thật, có thể là mặc định)
+        return props;
     }
 
-    /**
-     * Gắn CSS nếu file tồn tại trong classpath.
-     */
-    // private void attachCssIfPresent(Scene scene, String cssClasspathPath) { // Gắn stylesheet cho Scene nếu có
-    //     URL css = getResource(cssClasspathPath); // Tìm CSS trong resources theo đường dẫn classpath
-    //     if (css != null) { // Nếu tìm thấy
-    //         scene.getStylesheets().add(css.toExternalForm()); // Chuyển URL thành chuỗi và thêm vào danh sách
-    //                                                           // stylesheets
-    //     }
-    // }
-
-    /**
-     * UI dự phòng khi chưa có FXML/Controller – giúp bạn chạy thử ngay.
-     * Hiển thị thông báo cần tạo fxml & controller theo đúng cấu trúc.
-     */
-    private Scene buildFallbackScene(Exception cause) { // Tạo Scene đơn giản khi FXML chưa sẵn sàng
-        BorderPane root = new BorderPane(); // Bố cục BorderPane để đặt nội dung giữa
-        String message = "👋 Xin chào, dự án đã chạy!\n\n" +
-                "Chưa nạp được main.fxml. Hãy tạo: src/main/resources/fxml/main.fxml\n" +
-                "Controller gợi ý: com.example.storemanagement.controller.MainController\n\n" +
-                "Chi tiết lỗi: " + (cause != null ? cause.getMessage() : "(không rõ)"); // Chuỗi thông báo hướng dẫn
-                                                                                        // nhanh
-        Label label = new Label(message); // Tạo Label hiển thị thông điệp
-        label.setWrapText(true); // Cho phép xuống dòng tự động khi dài
-        label.setStyle("-fx-padding: 24; -fx-font-size: 14px;"); // Thêm padding và cỡ chữ cho dễ đọc
-        root.setCenter(label); // Đặt Label vào giữa BorderPane
-        return new Scene(root, 960, 600); // Tạo Scene với kích thước mặc định để hiển thị
+    // Helper alert methods
+    private void info(String msg) {
+        showAlert(Alert.AlertType.INFORMATION, "Thông báo", msg);
     }
 
-    // ===== Helpers nhỏ cho Alert =====
-    private void info(String msg) { // Hiển thị hộp thoại thông tin
-        showAlert(Alert.AlertType.INFORMATION, "Thông báo", msg); // Gọi helper chung với kiểu INFORMATION
+    private void warn(String msg) {
+        showAlert(Alert.AlertType.WARNING, "Chú ý", msg);
     }
 
-    private void warn(String msg) { // Hiển thị hộp thoại cảnh báo
-        showAlert(Alert.AlertType.WARNING, "Chú ý", msg); // Gọi helper chung với kiểu WARNING
+    private void showAlert(Alert.AlertType type, String title, String msg) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.show();
     }
 
-    private void showAlert(Alert.AlertType type, String title, String msg) { // Helper tổng cho mọi loại Alert
-        Alert alert = new Alert(type); // Tạo Alert theo kiểu đã chỉ định
-        alert.setTitle(title); // Đặt tiêu đề hộp thoại
-        alert.setHeaderText(null); // Bỏ phần header để giao diện gọn
-        alert.setContentText(msg); // Nội dung thông báo
-        alert.show(); // Hiển thị ngay (không chặn luồng)
+    // Utility to get resources
+    private URL getResource(String path) {
+        return getClass().getResource(path);
     }
 
-    // ===== Truy xuất tài nguyên tiện lợi =====
-    private URL getResource(String path) { // Helper lấy URL tài nguyên theo đường dẫn classpath (bắt đầu bằng "/")
-        return getClass().getResource(path); // Trả về URL; null nếu không tồn tại
-    }
-
-    private InputStream getResourceAsStream(String path) { // Helper lấy luồng InputStream của tài nguyên
-        return getClass().getResourceAsStream(path); // Trả về InputStream; null nếu không tìm thấy
-    }
-
-    /**
-     * Cho phép module khác đọc cấu hình DB đã load (nếu cần).
-     * Ví dụ trong DAO bạn có thể dùng Main.getDbProps().getProperty("url").
-     */
-    public static Properties getDbProps() { // Getter tĩnh để truy xuất cấu hình DB ở nơi khác
-        return dbProps; // Trả về đối tượng Properties đã nạp
+    public static Properties getDbProps() {
+        return dbProps;
     }
 }

@@ -12,7 +12,8 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.example.storemanagement.controller.LogisticsController">
+    fx:controller="com.example.storemanagement.controller.LogisticsController"
+    styleClass="md-card-elevated">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20" />
     </padding>
@@ -47,35 +48,35 @@
     <!-- Stock Transfer Section -->
     <VBox spacing="10"
         style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-border-color: #ddd; -fx-border-radius: 5;">
-        <Label text="Điều chuyển hàng hóa (Kho Tổng -> Kho Cơ Sở)"
+        <Label text="Điều chuyển hàng hóa"
             style="-fx-font-size: 16px; -fx-font-weight: bold;" />
 
         <HBox spacing="15" alignment="CENTER_LEFT">
             <VBox spacing="5">
                 <Label text="Sản phẩm (từ bảng trên)" />
                 <TextField fx:id="tfSelectedProduct" editable="false"
-                    promptText="Chọn sản phẩm ở trên" prefWidth="200" />
+                    promptText="Chọn sản phẩm ở trên" prefWidth="200" styleClass="md-text-field" />
             </VBox>
 
             <VBox spacing="5">
-                <Label text="Từ Kho (Tổng)" />
-                <ComboBox fx:id="cbFromStore" prefWidth="180" />
+                <Label text="Từ Kho" />
+                <ComboBox fx:id="cbFromStore" prefWidth="180" styleClass="md-combobox" />
             </VBox>
 
             <Label text="➔" style="-fx-font-size: 20px; -fx-padding: 20 0 0 0;" />
 
             <VBox spacing="5">
-                <Label text="Đến Kho (Cơ sở)" />
-                <ComboBox fx:id="cbToStore" prefWidth="180" />
+                <Label text="Đến Kho" />
+                <ComboBox fx:id="cbToStore" prefWidth="180" styleClass="md-combobox" />
             </VBox>
 
             <VBox spacing="5">
                 <Label text="Số lượng" />
-                <TextField fx:id="tfQuantity" prefWidth="100" />
+                <TextField fx:id="tfQuantity" prefWidth="100" styleClass="md-text-field" />
             </VBox>
 
             <Button text="Thực hiện chuyển" onAction="#onTransfer"
-                style="-fx-base: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
+                styleClass="md-button-primary"
                 prefHeight="35" />
         </HBox>
     </VBox>

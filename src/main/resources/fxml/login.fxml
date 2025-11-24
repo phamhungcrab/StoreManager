@@ -1,18 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.storemanagement.controller.LoginController"
-            prefWidth="400" prefHeight="300">
-    <children>
-        <Label layoutX="140" layoutY="30" text="ĐĂNG NHẬP" style="-fx-font-size: 18;"/>
-        <TextField fx:id="usernameField" layoutX="100" layoutY="80" promptText="Tên đăng nhập"/>
-        <PasswordField fx:id="passwordField" layoutX="100" layoutY="120" promptText="Mật khẩu"/>
-        <Button text="Đăng nhập" layoutX="150" layoutY="170" onAction="#handleLogin"/>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+    fx:controller="com.example.storemanagement.controller.LoginController"
+    style="-fx-background-color: #F5F5F5;"
+    prefWidth="500" prefHeight="600">
 
-        <Text layoutX="120" layoutY="230" text="Chưa có tài khoản?" />
-        <Hyperlink text="Đăng ký ngay" layoutX="230" layoutY="216" onAction="#onSwitchToRegister"/>
-    </children>
-</AnchorPane>
+    <!-- Material Design Card Container -->
+    <VBox alignment="CENTER" spacing="0" maxWidth="400" styleClass="md-card-elevated">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40" />
+        </padding>
+
+        <!-- Header Section -->
+        <VBox alignment="CENTER" spacing="8" style="-fx-padding: 0 0 32 0;">
+            <Label text="ĐĂNG NHẬP" styleClass="h1"
+                style="-fx-text-fill: #1976D2; -fx-font-size: 28px; -fx-font-weight: bold;" />
+            <Label text="Quản lý cửa hàng" styleClass="caption"
+                style="-fx-text-fill: #757575;" />
+        </VBox>
+
+        <!-- Login Form -->
+        <VBox spacing="24" style="-fx-padding: 0 0 24 0;">
+            <!-- Username Field -->
+            <VBox spacing="4">
+                <Label text="Tên đăng nhập" styleClass="body-2"
+                    style="-fx-text-fill: #757575; -fx-font-size: 12px;" />
+                <TextField fx:id="usernameField"
+                    promptText="Nhập tên đăng nhập"
+                    styleClass="md-text-field"
+                    style="-fx-pref-height: 48px;" />
+            </VBox>
+
+            <!-- Password Field -->
+            <VBox spacing="4">
+                <Label text="Mật khẩu" styleClass="body-2"
+                    style="-fx-text-fill: #757575; -fx-font-size: 12px;" />
+                <PasswordField fx:id="passwordField"
+                    promptText="Nhập mật khẩu"
+                    styleClass="md-text-field"
+                    style="-fx-pref-height: 48px;" />
+            </VBox>
+        </VBox>
+
+        <!-- Login Button -->
+        <Button text="ĐĂNG NHẬP"
+            onAction="#handleLogin"
+            styleClass="md-button-raised"
+            maxWidth="Infinity"
+            style="-fx-pref-height: 48px; -fx-font-size: 15px; -fx-font-weight: bold;" />
+
+        <!-- Register Link Section -->
+        <HBox alignment="CENTER" spacing="4" style="-fx-padding: 24 0 0 0;">
+            <Text text="Chưa có tài khoản?" style="-fx-fill: #757575; -fx-font-size: 13px;" />
+            <Hyperlink text="Đăng ký ngay"
+                onAction="#onSwitchToRegister"
+                style="-fx-text-fill: #1976D2; -fx-font-size: 13px; -fx-font-weight: 500;" />
+        </HBox>
+    </VBox>
+</StackPane>

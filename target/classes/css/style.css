@@ -1,111 +1,509 @@
-/* ==========================================================================
-   JavaFX Global Stylesheet for Store Management System
-   - Giao diện gọn gàng, dễ nhìn, phù hợp 3 màn hình: Customers/Inventory/Finance
-   - Có thể gắn trong Main.java: scene.getStylesheets().add("/css/style.css");
-   Tips: Các class dưới đây áp vào FXML bằng styleClass (optional)
-   ========================================================================== */
+/* =============================================================================
+   Material Design Stylesheet for Store Management System
+   JavaFX Application - Modern, Clean, Professional UI
 
-/* ----- Base ----- */
+   Design System:
+   - Color Palette: Material Design Blue/Pink
+   - Typography: Roboto/Segoe UI
+   - Elevation: Material shadows
+   - Animations: Smooth 200ms transitions
+   ============================================================================= */
+
+/* ============================================================================
+   ROOT & CSS VARIABLES
+   ============================================================================ */
 .root {
-  -fx-font-family: "Segoe UI", "Roboto", "Arial";
-  -fx-font-size: 13px;
-  -fx-base: #ffffff;                    /* Nền chung */
-  -fx-accent: #2962ff;                  /* Màu nhấn (button, selection) */
-  -fx-focus-color: derive(-fx-accent, 20%);
-  -fx-faint-focus-color: rgba(41,98,255,0.2);
+    /* Material Design Color Palette */
+    -md-primary: #1976D2;
+    -md-primary-dark: #1565C0;
+    -md-primary-light: #BBDEFB;
+    -md-accent: #FF4081;
+    -md-background: #F5F5F5;
+    -md-surface: #FFFFFF;
+    -md-error: #F44336;
+    -md-success: #4CAF50;
+    -md-warning: #FF9800;
+    -md-text-primary: #212121;
+    -md-text-secondary: #757575;
+    -md-text-hint: #9E9E9E;
+    -md-divider: #BDBDBD;
+
+    /* Typography */
+    -fx-font-family: 'Roboto', 'Segoe UI', 'Arial', sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: -md-text-primary;
+
+    /* Base styles */
+    -fx-base: -md-surface;
+    -fx-background: -md-background;
+    -fx-accent: -md-primary;
+    -fx-focus-color: -md-primary;
+    -fx-faint-focus-color: rgba(25, 118, 210, 0.1);
 }
 
-/* ----- MenuBar ----- */
-.menu-bar {
-  -fx-background-color: linear-gradient(to bottom, #fafafa, #f2f2f2);
-  -fx-border-color: #e2e2e2;
-  -fx-border-width: 0 0 1 0;
-}
-.menu-item:focused {
-  -fx-background-color: rgba(41,98,255,0.12);
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+.h1, .heading-1 {
+    -fx-font-size: 24px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -md-text-primary;
+    -fx-padding: 0 0 8 0;
 }
 
-/* ----- Buttons ----- */
+.h2, .heading-2 {
+    -fx-font-size: 20px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -md-text-primary;
+    -fx-padding: 0 0 6 0;
+}
+
+.h3, .heading-3 {
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -md-text-primary;
+}
+
+.body-1 {
+    -fx-font-size: 14px;
+    -fx-text-fill: -md-text-primary;
+    -fx-line-spacing: 4px;
+}
+
+.body-2 {
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -md-text-primary;
+}
+
+.caption {
+    -fx-font-size: 12px;
+    -fx-text-fill: -md-text-secondary;
+}
+
+/* ============================================================================
+   MATERIAL DESIGN BUTTONS
+   ============================================================================ */
+
+/* Base Button Style */
 .button {
-  -fx-background-color: #ffffff, linear-gradient(to bottom, #ffffff, #f6f6f6);
-  -fx-background-insets: 0,1;
-  -fx-background-radius: 10;
-  -fx-padding: 6 12 6 12;
-  -fx-border-color: #d9d9d9;
-  -fx-border-radius: 10;
+    -fx-background-color: -md-surface;
+    -fx-background-radius: 8px;
+    -fx-padding: 10 20 10 20;
+    -fx-text-fill: -md-text-primary;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
+    -fx-border-color: transparent;
+    -fx-border-radius: 8px;
 }
+
 .button:hover {
-  -fx-background-color: #ffffff, linear-gradient(to bottom, #ffffff, #ededed);
+    -fx-background-color: derive(-md-surface, -5%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 6, 0, 0, 3);
 }
+
 .button:pressed {
-  -fx-background-color: #f0f0f0;
-}
-.button:default {
-  -fx-background-color: -fx-accent;
-  -fx-text-fill: white;
+    -fx-background-color: derive(-md-surface, -10%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 0, 1);
+    -fx-translate-y: 1px;
 }
 
-/* Utility classes (áp bằng node.getStyleClass().add("btn-danger")) */
-.btn-danger { -fx-background-color: #e53935; -fx-text-fill: #fff; }
-.btn-success { -fx-background-color: #2e7d32; -fx-text-fill: #fff; }
-
-/* ----- TextField / ComboBox ----- */
-.text-field, .combo-box-base {
-  -fx-background-radius: 8;
-  -fx-border-radius: 8;
-  -fx-border-color: #dcdcdc;
-  -fx-padding: 6 10 6 10;
-}
-.text-field:focused, .combo-box-base:focused {
-  -fx-border-color: -fx-accent;
-  -fx-background-color: #ffffff;
+.button:disabled {
+    -fx-opacity: 0.6;
+    -fx-cursor: default;
 }
 
-/* ----- TableView ----- */
+/* Material Design Raised Button (Primary) */
+.md-button-raised, .md-button-primary {
+    -fx-background-color: -md-primary;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 6, 0, 0, 3);
+}
+
+.md-button-raised:hover, .md-button-primary:hover {
+    -fx-background-color: -md-primary-dark;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 4);
+}
+
+.md-button-raised:pressed, .md-button-primary:pressed {
+    -fx-background-color: derive(-md-primary, -15%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 4, 0, 0, 2);
+}
+
+/* Material Design Outlined Button */
+.md-button-outlined {
+    -fx-background-color: transparent;
+    -fx-border-color: -md-primary;
+    -fx-border-width: 2px;
+    -fx-text-fill: -md-primary;
+    -fx-effect: none;
+}
+
+.md-button-outlined:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+.md-button-outlined:pressed {
+    -fx-background-color: rgba(25, 118, 210, 0.16);
+}
+
+/* Material Design Text Button */
+.md-button-text {
+    -fx-background-color: transparent;
+    -fx-text-fill: -md-primary;
+    -fx-effect: none;
+    -fx-padding: 8 16 8 16;
+}
+
+.md-button-text:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+.md-button-text:pressed {
+    -fx-background-color: rgba(25, 118, 210, 0.16);
+}
+
+/* Accent Button */
+.md-button-accent {
+    -fx-background-color: -md-accent;
+    -fx-text-fill: white;
+}
+
+.md-button-accent:hover {
+    -fx-background-color: derive(-md-accent, -10%);
+}
+
+/* Success/Error/Warning Buttons */
+.md-button-success {
+    -fx-background-color: -md-success;
+    -fx-text-fill: white;
+}
+
+.md-button-error, .md-button-danger {
+    -fx-background-color: -md-error;
+    -fx-text-fill: white;
+}
+
+.md-button-warning {
+    -fx-background-color: -md-warning;
+    -fx-text-fill: white;
+}
+
+/* ============================================================================
+   MATERIAL DESIGN TEXT FIELDS
+   ============================================================================ */
+.text-field, .password-field {
+    -fx-background-color: transparent, transparent, white;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 8px;
+    -fx-border-color: -md-divider;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-radius: 0;
+    -fx-padding: 12 10 12 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: -md-text-primary;
+    -fx-prompt-text-fill: -md-text-hint;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: -md-primary;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-color: transparent, transparent, white;
+}
+
+.text-field:disabled, .password-field:disabled {
+    -fx-opacity: 0.6;
+    -fx-background-color: -md-background;
+}
+
+/* Material Design Text Field Style */
+.md-text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: -md-divider;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-radius: 0;
+    -fx-padding: 16 12 8 12;
+    -fx-font-size: 16px;
+}
+
+.md-text-field:focused {
+    -fx-border-color: -md-primary;
+    -fx-border-width: 0 0 3 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(25,118,210,0.15), 4, 0, 0, 2);
+}
+
+/* ============================================================================
+   MATERIAL DESIGN TABLES
+   ============================================================================ */
 .table-view {
-  -fx-background-color: #ffffff;
-  -fx-border-color: #e2e2e2;
-  -fx-border-width: 1;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-background-radius: 8px;
 }
-.table-view:focused {
-  -fx-background-insets: 0, 1;
-}
+
 .table-view .column-header-background {
-  -fx-background-color: linear-gradient(to bottom, #fafafa, #f0f0f0);
-  -fx-border-color: #e2e2e2;
+    -fx-background-color: -md-surface;
+    -fx-background-radius: 8px 8px 0 0;
 }
-.table-view .column-header, .table-view .filler {
-  -fx-size: 36px;
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-padding: 12 8 12 8;
+    -fx-font-weight: 500;
+    -fx-text-fill: -md-text-primary;
+    -fx-border-color: -md-divider;
+    -fx-border-width: 0 0 2 0;
 }
+
+.table-view .column-header .label {
+    -fx-font-weight: 500;
+    -fx-font-size: 13px;
+    -fx-text-fill: -md-text-primary;
+}
+
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-padding: 8 0 8 0;
+}
+
 .table-row-cell:odd {
-  -fx-background-color: #fafafa;
+    -fx-background-color: #FAFAFA;
 }
+
+.table-row-cell:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.05);
+}
+
 .table-row-cell:selected {
-  -fx-background-color: -fx-accent;
+    -fx-background-color: -md-primary-light;
 }
+
 .table-row-cell:selected .text {
-  -fx-fill: white;
+    -fx-fill: -md-text-primary;
 }
+
+.table-cell {
+    -fx-padding: 8 12 8 12;
+    -fx-text-fill: -md-text-primary;
+}
+
 .table-view .placeholder .label {
-  -fx-text-fill: #888;
+    -fx-text-fill: -md-text-secondary;
+    -fx-font-style: italic;
 }
 
-/* ----- Pagination ----- */
-.pagination > .pagination-control .control-box .number-button:selected {
-  -fx-background-color: -fx-accent;
-  -fx-text-fill: white;
+/* ============================================================================
+   MATERIAL DESIGN CARDS & PANELS
+   ============================================================================ */
+.md-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.12), 8, 0, 0, 2);
+    -fx-padding: 16;
 }
 
-/* ----- Status/Toolbar area (nếu không inline style) ----- */
-.status-bar {
-  -fx-padding: 8;
-  -fx-background-color: #f6f6f6;
-  -fx-border-color: #e2e2e2;
-  -fx-border-width: 1 0 0 0;
+.md-card-elevated {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 12, 0, 0, 4);
+    -fx-padding: 20;
 }
 
-/* ----- Labels / Headings ----- */
-.label.title {
-  -fx-font-size: 16px;
-  -fx-font-weight: bold;
+.md-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 4px;
+    -fx-padding: 16;
+    -fx-border-color: -md-divider;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+}
+
+/* ============================================================================
+   MENU BAR
+   ============================================================================ */
+.menu-bar {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
+    -fx-padding: 8 0 8 0;
+}
+
+.menu-bar .label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -md-text-primary;
+}
+
+.menu-item {
+    -fx-padding: 10 16 10 16;
+}
+
+.menu-item:focused {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+.menu-item:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+/* ============================================================================
+   COMBO BOX
+   ============================================================================ */
+.combo-box-base {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: -md-divider;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-padding: 8 12 8 12;
+}
+
+.combo-box-base:focused {
+    -fx-border-color: -md-primary;
+    -fx-effect: dropshadow(three-pass-box, rgba(25,118,210,0.15), 4, 0, 0, 2);
+}
+
+.combo-box-base .arrow-button {
+    -fx-background-color: transparent;
+}
+
+/* ============================================================================
+   SCROLL BAR
+   ============================================================================ */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: derive(-md-text-secondary, 50%);
+    -fx-background-radius: 8px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: -md-text-secondary;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+/* ============================================================================
+   TAB PANE
+   ============================================================================ */
+.tab-pane {
+    -fx-background-color: white;
+    -fx-border-color: -md-divider;
+    -fx-border-width: 1px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: -md-surface;
+    -fx-padding: 8 8 0 8;
+}
+
+.tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-padding: 12 20 12 20;
+}
+
+.tab:selected {
+    -fx-background-color: white;
+    -fx-border-color: -md-primary -md-primary transparent -md-primary;
+    -fx-border-width: 2px 2px 0 2px;
+}
+
+.tab .tab-label {
+    -fx-text-fill: -md-text-secondary;
+    -fx-font-weight: 500;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: -md-primary;
+}
+
+/* ============================================================================
+   DIALOG & ALERT
+   ============================================================================ */
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 16, 0, 0, 8);
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: -md-primary;
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-padding: 16;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: 500;
+}
+
+/* ============================================================================
+   PROGRESS INDICATORS
+   ============================================================================ */
+.progress-bar {
+    -fx-background-color: -md-background;
+    -fx-background-radius: 4px;
+}
+
+.progress-bar .bar {
+    -fx-background-color: -md-primary;
+    -fx-background-radius: 4px;
+    -fx-background-insets: 0;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+.elevated-1 {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.12), 4, 0, 0, 2);
+}
+
+.elevated-2 {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.16), 8, 0, 0, 4);
+}
+
+.elevated-3 {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 12, 0, 0, 6);
+}
+
+.text-primary {
+    -fx-text-fill: -md-text-primary;
+}
+
+.text-secondary {
+    -fx-text-fill: -md-text-secondary;
+}
+
+.bg-primary {
+    -fx-background-color: -md-primary;
+}
+
+.bg-accent {
+    -fx-background-color: -md-accent;
+}
+
+.bg-surface {
+    -fx-background-color: -md-surface;
+}
+
+.rounded {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+.smooth-transition {
+    -fx-transition: all 200ms ease;
 }

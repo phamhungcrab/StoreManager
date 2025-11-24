@@ -50,6 +50,7 @@ public class LogisticsController {
 
     private final InventoryService inventoryService = new InventoryService();
     private ProductDAO.InventoryOverview selectedItem;
+    private List<Store> stores; // holds all stores loaded from DB
 
     @FXML
     public void initialize() {
@@ -61,12 +62,14 @@ public class LogisticsController {
         colQuantity.setCellValueFactory(cd -> new ReadOnlyObjectWrapper<>(cd.getValue().quantity));
         colUpdatedAt.setCellValueFactory(cd -> new ReadOnlyStringWrapper(DateUtils.format(cd.getValue().updatedAt)));
 
-        // Load stores for ComboBoxes
-        List<Store> stores = loadStores();
+        // Load stores from DB
+        stores = loadStores();
+
+        // Populate combo boxes with all stores
         cbFromStore.getItems().setAll(stores);
         cbToStore.getItems().setAll(stores);
 
-        // Setup ComboBox converters
+        // Converter for displaying store name and type
         StringConverter<Store> storeConverter = new StringConverter<>() {
             @Override
             public String toString(Store s) {
@@ -75,27 +78,36 @@ public class LogisticsController {
 
             @Override
             public Store fromString(String string) {
-                return null;
+                return null; // not needed for combo box selection
             }
         };
         cbFromStore.setConverter(storeConverter);
         cbToStore.setConverter(storeConverter);
 
-        // Auto-select Central for From and Retail for To if possible
-        cbFromStore.getSelectionModel()
-                .select(stores.stream().filter(s -> "CENTRAL".equals(s.getType())).findFirst().orElse(null));
-        cbToStore.getSelectionModel()
-                .select(stores.stream().filter(s -> "RETAIL".equals(s.getType())).findFirst().orElse(null));
+        // Auto-select first store if available
+        if (!stores.isEmpty()) {
+            cbFromStore.getSelectionModel().select(0);
+            if (stores.size() > 1) {
+                cbToStore.getSelectionModel().select(1);
+            } else {
+                cbToStore.getSelectionModel().select(0);
+            }
+        }
 
         // Table selection listener
         inventoryTable.getSelectionModel().selectedItemProperty().addListener((obs, old, val) -> {
             selectedItem = val;
             if (val != null) {
                 tfSelectedProduct.setText(val.productName + " (" + val.sku + ")");
-                // Auto select the store of the selected item as "From" if it matches
-                Store s = stores.stream().filter(st -> st.getId().equals(val.storeId)).findFirst().orElse(null);
-                if (s != null)
+                // Auto-select the store of the selected item as "From" if it matches a central
+                // store
+                Store s = stores.stream()
+                        .filter(st -> st.getId().equals(val.storeId))
+                        .findFirst()
+                        .orElse(null);
+                if (s != null) {
                     cbFromStore.getSelectionModel().select(s);
+                }
             } else {
                 tfSelectedProduct.setText("");
             }
@@ -118,7 +130,6 @@ public class LogisticsController {
     private void loadData() {
         try {
             String kw = searchField.getText();
-            // Load all inventory (no store filter, no supplier filter)
             List<ProductDAO.InventoryOverview> list = inventoryService.getInventoryOverview(null, null, kw, 1, 1000);
             inventoryTable.setItems(FXCollections.observableArrayList(list));
         } catch (SQLException e) {
@@ -142,12 +153,11 @@ public class LogisticsController {
             AlertUtils.warn("Lỗi", "Kho xuất và kho nhập phải khác nhau.");
             return;
         }
-
         try {
             int qty = Integer.parseInt(tfQuantity.getText().trim());
-            if (qty <= 0)
+            if (qty <= 0) {
                 throw new NumberFormatException();
-
+            }
             inventoryService.transferStock(from.getId(), to.getId(), selectedItem.productId, qty, "Logistics Transfer");
             AlertUtils.info("Thành công",
                     "Đã chuyển " + qty + " sản phẩm từ " + from.getName() + " sang " + to.getName());
@@ -174,7 +184,7 @@ public class LogisticsController {
                 s.setType(rs.getString("type"));
                 s.setAddress(rs.getString("address"));
                 s.setPhone(rs.getString("phone"));
-                // timestamp...
+                // timestamp handling omitted for brevity
                 list.add(s);
             }
         } catch (SQLException ignored) {
