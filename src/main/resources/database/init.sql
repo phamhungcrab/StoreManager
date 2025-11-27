@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS suppliers;
 DROP TABLE IF EXISTS finance_reports;
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS stores;
-
+DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- =============================================================
@@ -344,12 +344,6 @@ INSERT INTO finance_reports(store_id, report_date, type, category, amount, note)
  (1, CURDATE(), 'EXPENSE', 'Equipment',   30000.00, 'Sửa chữa kệ'),
  (2, CURDATE(), 'INCOME',  'Sales',       89000.00, 'Doanh thu bán lẻ');
 
-
-
-
-
-
-
 -- 3.1) Bổ sung trạng thái cho orders (giữ mặc định CONFIRMED để tương thích)
 ALTER TABLE orders
   ADD COLUMN status ENUM('CONFIRMED','PAID','CANCELED','REFUNDED') NOT NULL DEFAULT 'CONFIRMED' AFTER total_amount,
@@ -388,6 +382,213 @@ ALTER TABLE orders
 
 
 
+
+
+
+
+-- sửa 23/11/2025
+ALTER TABLE users ADD COLUMN email VARCHAR(128) UNIQUE AFTER username;
+
+SELECT * FROM users;
+
+-- 1) Cập nhật bảng stores: thêm cột type
+ALTER TABLE stores
+ADD COLUMN type ENUM('CENTRAL', 'RETAIL') NOT NULL DEFAULT 'RETAIL'
+AFTER name;
+-- Đặt S001 làm Kho Tổng (CENTRAL)
+UPDATE stores
+SET type = 'CENTRAL'
+WHERE code = 'S001';
+-- 2) Cập nhật bảng users: mở rộng ENUM role
+-- Lưu ý: MySQL không hỗ trợ trực tiếp thêm giá trị vào giữa ENUM dễ dàng,
+-- ta dùng MODIFY COLUMN để định nghĩa lại toàn bộ danh sách.
+ALTER TABLE users
+MODIFY COLUMN role ENUM(
+        'admin',
+        'user',
+        'seller',
+        'logistic',
+        'accountant'
+    ) NOT NULL DEFAULT 'user';
+-- (Mật khẩu mẫu ở trên là placeholder, thực tế bạn nên tạo qua giao diện Register hoặc dùng hash chuẩn)
+-- Mật khẩu '123456' hash BCrypt: $2a$10$6j.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q.q
+-- Để tiện, ta dùng câu lệnh update sau khi insert nếu muốn set pass cụ thể,
+-- hoặc user tự đăng ký rồi admin sửa role.
+
+
+
+-- 1. Thêm cột store_id vào bảng users để liên kết nhân viên với cửa hàng
+ALTER TABLE users
+ADD COLUMN store_id BIGINT NULL
+AFTER role;
+ALTER TABLE users
+ADD CONSTRAINT fk_users_store FOREIGN KEY (store_id) REFERENCES stores(id) ON UPDATE CASCADE ON DELETE
+SET NULL;
+-- 2. Thêm cột cash_balance vào bảng stores để quản lý quỹ tiền mặt (Petty Cash)
+ALTER TABLE stores
+ADD COLUMN cash_balance DECIMAL(14, 2) NOT NULL DEFAULT 0.00
+AFTER phone;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- =============================================================
+-- PHẦN 1: TẠO CÁC BẢNG
+-- Chạy toàn bộ file này (Ctrl+Shift+Enter)
+-- =============================================================
+USE store_management;
+-- 1. Supplier Debts Table (Accounts Payable)
+DROP TABLE IF EXISTS supplier_debts;
+CREATE TABLE supplier_debts (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    supplier_id BIGINT NOT NULL,
+    amount DECIMAL(14, 2) NOT NULL,
+    transaction_type ENUM('ADD_DEBT', 'PAY_DEBT', 'ADJUSTMENT') NOT NULL,
+    note VARCHAR(255),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(64),
+    CONSTRAINT fk_debt_supplier FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    INDEX idx_debt_supplier_created (supplier_id, created_at)
+) ENGINE = InnoDB;
+-- 2. Budget Allocations Table
+DROP TABLE IF EXISTS budget_allocations;
+CREATE TABLE budget_allocations (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    store_id BIGINT NOT NULL,
+    amount DECIMAL(14, 2) NOT NULL,
+    note VARCHAR(255),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(64),
+    CONSTRAINT fk_allocation_store FOREIGN KEY (store_id) REFERENCES stores(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    INDEX idx_allocation_store_created (store_id, created_at)
+) ENGINE = InnoDB;
+-- 3. Budget Expenses Table
+DROP TABLE IF EXISTS budget_expenses;
+CREATE TABLE budget_expenses (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    store_id BIGINT NOT NULL,
+    amount DECIMAL(14, 2) NOT NULL,
+    reason VARCHAR(255) NOT NULL,
+    note VARCHAR(500),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(64),
+    CONSTRAINT fk_expense_store FOREIGN KEY (store_id) REFERENCES stores(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    INDEX idx_expense_store_created (store_id, created_at)
+) ENGINE = InnoDB;
+
+-- =============================================================
+-- PHẦN 2: TRIGGER 1 - Tăng cash_balance khi cấp ngân sách
+-- Chạy toàn bộ file này (Ctrl+Shift+Enter)
+-- =============================================================
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS trg_allocation_after_insert $$
+
+CREATE TRIGGER trg_allocation_after_insert
+AFTER INSERT ON budget_allocations
+FOR EACH ROW
+BEGIN
+    UPDATE stores
+    SET cash_balance = cash_balance + NEW.amount
+    WHERE id = NEW.store_id;
+END $$
+
+DELIMITER ;
+
+
+-- =============================================================
+-- PHẦN 3: TRIGGER 2 - Giảm cash_balance khi chi tiêu
+-- Chạy toàn bộ file này (Ctrl+Shift+Enter)
+-- =============================================================
+USE store_management;
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS trg_expense_after_insert $$
+
+CREATE TRIGGER trg_expense_after_insert
+AFTER INSERT ON budget_expenses
+FOR EACH ROW
+BEGIN
+    DECLARE current_balance DECIMAL(14,2);
+
+    -- Lấy số dư hiện tại
+    SELECT cash_balance INTO current_balance
+    FROM stores
+    WHERE id = NEW.store_id
+    FOR UPDATE;
+
+    -- Nếu số dư < số tiền chi → báo lỗi (rollback)
+    IF current_balance < NEW.amount THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Insufficient budget balance for this expense';
+    END IF;
+
+    -- Trừ tiền ngân sách
+    UPDATE stores
+    SET cash_balance = cash_balance - NEW.amount
+    WHERE id = NEW.store_id;
+END $$
+
+DELIMITER ;
+
+
+-- =============================================================
+-- PHẦN 4: TEST DATA
+-- Chạy toàn bộ file này (Ctrl+Shift+Enter)
+-- =============================================================
+USE store_management;
+-- Test: Allocate budget to Store 1
+INSERT INTO budget_allocations (store_id, amount, note, created_by)
+VALUES (1, 10000000, 'Cấp quỹ tháng 11/2025', 'admin');
+-- Test: Add debt to Supplier 1
+INSERT INTO supplier_debts (
+        supplier_id,
+        amount,
+        transaction_type,
+        note,
+        created_by
+    )
+VALUES (
+        1,
+        5000000,
+        'ADD_DEBT',
+        'Nhập hàng tháng 11',
+        'admin'
+    );
+-- Test: Seller records expense
+INSERT INTO budget_expenses (store_id, amount, reason, note, created_by)
+VALUES (
+        1,
+        500000,
+        'Thay bóng đèn',
+        'Bóng đèn LED khu vực bán hàng',
+        'seller_user'
+    );
+-- Verify results
+SELECT 'Store Cash Balance:' AS description,
+    cash_balance
+FROM stores
+WHERE id = 1;
+SELECT 'Supplier 1 Total Debt:' AS description,
+    SUM(amount) AS total_debt
+FROM supplier_debts
+WHERE supplier_id = 1;
 
 
 

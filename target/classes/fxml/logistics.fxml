@@ -5,10 +5,13 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="15" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
@@ -20,65 +23,115 @@
 
     <Label text="Logistics Dashboard" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
 
-    <!-- Inventory Overview Section -->
-    <VBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="Tổng quan tồn kho toàn hệ thống"
-            style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="Tổng quan &amp; Điều chuyển">
+            <VBox spacing="15" style="-fx-padding: 10;">
+                <!-- Inventory Overview Section -->
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+                    <Label text="Tổng quan tồn kho toàn hệ thống"
+                        style="-fx-font-size: 16px; -fx-font-weight: bold;" />
 
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextField fx:id="searchField" promptText="Tìm sản phẩm..." prefWidth="250" />
-            <Button text="Tìm kiếm" onAction="#onSearch" />
-            <Button text="Làm mới" onAction="#onRefresh" />
-        </HBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="searchField" promptText="Tìm sản phẩm..." prefWidth="250" />
+                        <Button text="Tìm kiếm" onAction="#onSearch" />
+                        <Button text="Làm mới" onAction="#onRefresh" />
+                    </HBox>
 
-        <TableView fx:id="inventoryTable" VBox.vgrow="ALWAYS">
-            <columns>
-                <TableColumn fx:id="colStoreName" text="Cửa hàng" prefWidth="150" />
-                <TableColumn fx:id="colStoreType" text="Loại kho" prefWidth="100" />
-                <TableColumn fx:id="colProductName" text="Sản phẩm" prefWidth="200" />
-                <TableColumn fx:id="colSku" text="SKU" prefWidth="100" />
-                <TableColumn fx:id="colQuantity" text="Tồn kho" prefWidth="100" />
-                <TableColumn fx:id="colUpdatedAt" text="Cập nhật cuối" prefWidth="150" />
-            </columns>
-        </TableView>
-    </VBox>
+                    <TableView fx:id="inventoryTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colStoreName" text="Cửa hàng" prefWidth="150" />
+                            <TableColumn fx:id="colStoreType" text="Loại kho" prefWidth="100" />
+                            <TableColumn fx:id="colProductName" text="Sản phẩm" prefWidth="200" />
+                            <TableColumn fx:id="colSku" text="SKU" prefWidth="100" />
+                            <TableColumn fx:id="colQuantity" text="Tồn kho" prefWidth="100" />
+                            <TableColumn fx:id="colUpdatedAt" text="Cập nhật cuối" prefWidth="150" />
+                        </columns>
+                    </TableView>
+                </VBox>
 
-    <Separator />
+                <Separator />
 
-    <!-- Stock Transfer Section -->
-    <VBox spacing="10"
-        style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-border-color: #ddd; -fx-border-radius: 5;">
-        <Label text="Điều chuyển hàng hóa"
-            style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                <!-- Stock Transfer Section -->
+                <VBox spacing="10"
+                    style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-border-color: #ddd; -fx-border-radius: 5;">
+                    <Label text="Điều chuyển hàng hóa"
+                        style="-fx-font-size: 16px; -fx-font-weight: bold;" />
 
-        <HBox spacing="15" alignment="CENTER_LEFT">
-            <VBox spacing="5">
-                <Label text="Sản phẩm (từ bảng trên)" />
-                <TextField fx:id="tfSelectedProduct" editable="false"
-                    promptText="Chọn sản phẩm ở trên" prefWidth="200" styleClass="md-text-field" />
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <VBox spacing="5">
+                            <Label text="Sản phẩm (từ bảng trên)" />
+                            <TextField fx:id="tfSelectedProduct" editable="false"
+                                promptText="Chọn sản phẩm ở trên" prefWidth="200"
+                                styleClass="md-text-field" />
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="Từ Kho" />
+                            <ComboBox fx:id="cbFromStore" prefWidth="180" styleClass="md-combobox" />
+                        </VBox>
+
+                        <Label text="➔" style="-fx-font-size: 20px; -fx-padding: 20 0 0 0;" />
+
+                        <VBox spacing="5">
+                            <Label text="Đến Kho" />
+                            <ComboBox fx:id="cbToStore" prefWidth="180" styleClass="md-combobox" />
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="Số lượng" />
+                            <TextField fx:id="tfQuantity" prefWidth="100"
+                                styleClass="md-text-field" />
+                        </VBox>
+
+                        <Button text="Thực hiện chuyển" onAction="#onTransfer"
+                            styleClass="md-button-primary"
+                            prefHeight="35" />
+                    </HBox>
+                </VBox>
             </VBox>
+        </Tab>
 
-            <VBox spacing="5">
-                <Label text="Từ Kho" />
-                <ComboBox fx:id="cbFromStore" prefWidth="180" styleClass="md-combobox" />
+        <Tab text="Quản lý Nhà cung cấp">
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <HBox spacing="10">
+                    <Button text="Thêm nhà cung cấp" onAction="#onAddSupplier"
+                        styleClass="md-button-primary" />
+                    <Button text="Sửa" onAction="#onEditSupplier" styleClass="md-button-primary" />
+                    <Button text="Xóa" onAction="#onDeleteSupplier" styleClass="md-button-primary" />
+                </HBox>
+                <TableView VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="ID" prefWidth="50" />
+                        <TableColumn text="Tên nhà cung cấp" prefWidth="200" />
+                        <TableColumn text="Liên hệ" prefWidth="150" />
+                        <TableColumn text="Địa chỉ" prefWidth="250" />
+                    </columns>
+                </TableView>
             </VBox>
+        </Tab>
 
-            <Label text="➔" style="-fx-font-size: 20px; -fx-padding: 20 0 0 0;" />
-
-            <VBox spacing="5">
-                <Label text="Đến Kho" />
-                <ComboBox fx:id="cbToStore" prefWidth="180" styleClass="md-combobox" />
+        <Tab text="Bảng giá nhập hàng">
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchPriceField" promptText="Tìm theo tên SP, SKU, NCC..."
+                        prefWidth="250" />
+                    <Button text="Tìm kiếm" onAction="#onSearchPrice" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="Thêm giá" onAction="#onAddPrice" styleClass="md-button-primary" />
+                    <Button text="Sửa giá" onAction="#onEditPrice" styleClass="md-button-primary" />
+                    <Button text="Xóa giá" onAction="#onDeletePrice" styleClass="md-button-primary" />
+                </HBox>
+                <TableView fx:id="priceTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colPriceProduct" text="Sản phẩm" prefWidth="200" />
+                        <TableColumn fx:id="colPriceSku" text="SKU" prefWidth="100" />
+                        <TableColumn fx:id="colPriceSupplier" text="Nhà cung cấp" prefWidth="200" />
+                        <TableColumn fx:id="colPriceValue" text="Giá nhập" prefWidth="150" />
+                        <TableColumn fx:id="colPriceUpdated" text="Cập nhật" prefWidth="150" />
+                    </columns>
+                </TableView>
             </VBox>
-
-            <VBox spacing="5">
-                <Label text="Số lượng" />
-                <TextField fx:id="tfQuantity" prefWidth="100" styleClass="md-text-field" />
-            </VBox>
-
-            <Button text="Thực hiện chuyển" onAction="#onTransfer"
-                styleClass="md-button-primary"
-                prefHeight="35" />
-        </HBox>
-    </VBox>
+        </Tab>
+    </TabPane>
 
 </VBox>
