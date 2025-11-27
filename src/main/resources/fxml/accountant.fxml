@@ -24,7 +24,8 @@
                     <top>
                         <HBox spacing="10" style="-fx-padding: 10;">
                             <Label text="Nhà cung cấp:" />
-                            <ComboBox fx:id="supplierCombo" prefWidth="200" />
+                            <ComboBox fx:id="supplierCombo" prefWidth="200"
+                                onAction="#onSupplierSelected" />
                             <Button text="Thêm nợ" onAction="#onAddDebt"
                                 style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
                             <Button text="Trả nợ" onAction="#onPayDebt"
@@ -53,7 +54,7 @@
                     <top>
                         <HBox spacing="10" style="-fx-padding: 10;">
                             <Label text="Cửa hàng:" />
-                            <ComboBox fx:id="storeCombo" prefWidth="200" />
+                            <ComboBox fx:id="storeCombo" prefWidth="200" onAction="#onStoreSelected" />
                             <Button text="Cấp quỹ" onAction="#onAllocateBudget"
                                 style="-fx-background-color: #3498db; -fx-text-fill: white;" />
                             <Label fx:id="storeBalanceLabel" text="Quỹ hiện tại: 0 VNĐ"
