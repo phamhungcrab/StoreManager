@@ -169,6 +169,16 @@ public class SellerBudgetController {
     }
 
     @FXML
+    private void onReportIncomeExpense() {
+        AlertUtils.showInfo("Tính năng đang phát triển", "Chức năng Báo cáo thu chi đang được xây dựng.");
+    }
+
+    @FXML
+    private void onSendReportToAccountant() {
+        AlertUtils.showInfo("Tính năng đang phát triển", "Chức năng Gửi báo cáo cho kế toán đang được xây dựng.");
+    }
+
+    @FXML
     private void onClose() {
         Stage stage = (Stage) amountField.getScene().getWindow();
         stage.close();
