@@ -448,6 +448,33 @@ public class AccountantController {
         stage.close();
     }
 
+    // ===== Report & Audit Methods =====
+
+    @FXML
+    private void onReportInventorySystem() {
+        AlertUtils.showInfo("Tính năng đang phát triển", "Báo cáo tồn kho toàn hệ thống");
+    }
+
+    @FXML
+    private void onReportWarehouseLog() {
+        AlertUtils.showInfo("Tính năng đang phát triển", "Báo cáo log biến động kho");
+    }
+
+    @FXML
+    private void onReportSupplierDebt() {
+        AlertUtils.showInfo("Tính năng đang phát triển", "Báo cáo công nợ nhà cung cấp");
+    }
+
+    @FXML
+    private void onReportStoreFund() {
+        AlertUtils.showInfo("Tính năng đang phát triển", "Báo cáo quỹ cửa hàng");
+    }
+
+    @FXML
+    private void onReportImportPrice() {
+        AlertUtils.showInfo("Tính năng đang phát triển", "Báo cáo giá nhập & lịch sử giá");
+    }
+
     // ===== Inner Classes for ComboBox and TableView =====
 
     public static class SupplierItem {

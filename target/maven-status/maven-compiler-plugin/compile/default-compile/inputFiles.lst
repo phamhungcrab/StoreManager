@@ -18,6 +18,7 @@ E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\controlle
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\controller\OrderLogController.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\controller\CustomerController.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\dao\CustomerDAO.java
+E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\dao\StoreDAO.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\util\DateUtils.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\service\CustomerService.java
 E:\project\StoreManager\demo\src\main\java\com\example\storemanagement\controller\SellerBudgetController.java

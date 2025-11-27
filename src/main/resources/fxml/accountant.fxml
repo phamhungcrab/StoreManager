@@ -126,6 +126,39 @@
                 </BorderPane>
             </Tab>
 
+            <!-- Tab 5: Report & Audit -->
+            <Tab text="Báo cáo &amp; Kiểm toán">
+                <BorderPane>
+                    <center>
+                        <FlowPane hgap="20" vgap="20" alignment="CENTER" style="-fx-padding: 40;">
+                            <Button text="Báo cáo tồn kho toàn hệ thống"
+                                onAction="#onReportInventorySystem"
+                                styleClass="md-button-primary" prefWidth="250" prefHeight="60"
+                                wrapText="true" style="-fx-font-size: 16px;" />
+
+                            <Button text="Báo cáo log biến động kho"
+                                onAction="#onReportWarehouseLog"
+                                styleClass="md-button-primary" prefWidth="250" prefHeight="60"
+                                wrapText="true" style="-fx-font-size: 16px;" />
+
+                            <Button text="Báo cáo công nợ nhà cung cấp"
+                                onAction="#onReportSupplierDebt"
+                                styleClass="md-button-primary" prefWidth="250" prefHeight="60"
+                                wrapText="true" style="-fx-font-size: 16px;" />
+
+                            <Button text="Báo cáo quỹ cửa hàng" onAction="#onReportStoreFund"
+                                styleClass="md-button-primary" prefWidth="250" prefHeight="60"
+                                wrapText="true" style="-fx-font-size: 16px;" />
+
+                            <Button text="Báo cáo giá nhập &amp; lịch sử giá"
+                                onAction="#onReportImportPrice"
+                                styleClass="md-button-primary" prefWidth="250" prefHeight="60"
+                                wrapText="true" style="-fx-font-size: 16px;" />
+                        </FlowPane>
+                    </center>
+                </BorderPane>
+            </Tab>
+
         </TabPane>
     </center>
 
