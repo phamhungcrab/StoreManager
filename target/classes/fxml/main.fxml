@@ -10,23 +10,23 @@
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
-                <Menu text="File">
+                <Menu text="Tệp">
                     <items>
-                        <MenuItem text="Exit" onAction="#exitApp" />
+                        <MenuItem text="Thoát" onAction="#exitApp" />
                     </items>
                 </Menu>
-                <Menu text="View">
+                <Menu text="Xem">
                     <items>
-                        <MenuItem text="Customers" onAction="#openCustomers" />
-                        <MenuItem text="Inventory" onAction="#openInventory" />
-                        <MenuItem text="Finance" onAction="#openFinance" />
+                        <MenuItem text="Khách hàng" onAction="#openCustomers" />
+                        <MenuItem text="Kho hàng" onAction="#openInventory" />
+                        <MenuItem text="Tài chính" onAction="#openFinance" />
                         <MenuItem fx:id="toggleMusicItem" text="🔊 Tắt nhạc nền"
                             onAction="#onToggleMusic" />
                     </items>
                 </Menu>
-                <Menu text="Help">
+                <Menu text="Trợ giúp">
                     <items>
-                        <MenuItem text="About" onAction="#openAbout" />
+                        <MenuItem text="Giới thiệu" onAction="#openAbout" />
                     </items>
                 </Menu>
             </menus>
@@ -40,24 +40,24 @@
                 <Insets top="8" right="8" bottom="8" left="8" />
             </padding>
             <children>
-                <Label text="Navigation" style="-fx-font-weight: bold; -fx-padding: 8 0 0 8;" />
-                <Button fx:id="btnCustomers" text="Customers" onAction="#openCustomers"
+                <Label text="Điều hướng" style="-fx-font-weight: bold; -fx-padding: 8 0 0 8;" />
+                <Button fx:id="btnCustomers" text="Khách hàng" onAction="#openCustomers"
                     maxWidth="Infinity" styleClass="md-button-primary" />
-                <Button fx:id="btnInventory" text="Inventory" onAction="#openInventory"
+                <Button fx:id="btnInventory" text="Kho hàng" onAction="#openInventory"
                     maxWidth="Infinity" styleClass="md-button-primary" />
-                <Button fx:id="btnFinance" text="Finance" onAction="#openFinance"
+                <Button fx:id="btnFinance" text="Tài chính" onAction="#openFinance"
                     maxWidth="Infinity" styleClass="md-button-primary" />
-                <Button fx:id="btnOrders" text="Orders" onAction="#openOrders"
+                <Button fx:id="btnOrders" text="Đơn hàng" onAction="#openOrders"
                     maxWidth="Infinity" styleClass="md-button-primary" />
-                <Button fx:id="btnOrderLogs" text="Order Logs" onAction="#openOrderLogs"
+                <Button fx:id="btnOrderLogs" text="Lịch sử đơn hàng" onAction="#openOrderLogs"
                     maxWidth="Infinity" styleClass="md-button-primary" />
-                <Button fx:id="btnLogistics" text="Logistics" onAction="#openLogistics"
+                <Button fx:id="btnLogistics" text="Vận chuyển" onAction="#openLogistics"
                     maxWidth="Infinity" styleClass="md-button-primary" />
-                <Button fx:id="btnAccountant" text="Accountant" onAction="#openAccountant"
+                <Button fx:id="btnAccountant" text="Kế toán" onAction="#openAccountant"
                     maxWidth="Infinity" styleClass="md-button-primary" />
-                <Button fx:id="btnSellerBudget" text="Seller Budget" onAction="#openSellerBudget"
+                <Button fx:id="btnSellerBudget" text="Quỹ bán hàng" onAction="#openSellerBudget"
                     maxWidth="Infinity" styleClass="md-button-primary" />
-                <Button fx:id="btnUsers" text="Users" onAction="#openUsers"
+                <Button fx:id="btnUsers" text="Người dùng" onAction="#openUsers"
                     maxWidth="Infinity" styleClass="md-button-primary" />
             </children>
         </VBox>
@@ -67,7 +67,7 @@
     <center>
         <StackPane fx:id="contentArea" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Loading..." />
+                <Label text="Đang tải..." />
             </children>
         </StackPane>
     </center>
@@ -77,7 +77,7 @@
         <HBox spacing="12.0" BorderPane.alignment="CENTER"
             style="-fx-padding: 8; -fx-background-color: #f6f6f6; -fx-border-color: #e2e2e2; -fx-border-width: 1 0 0 0;">
             <children>
-                <Label fx:id="statusLabel" text="Status: ready" />
+                <Label fx:id="statusLabel" text="Trạng thái: Sẵn sàng" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="welcomeLabel" text="Xin chào!" style="-fx-font-size: 18px;" />
                 <Button fx:id="logoutBtn" text="Đăng xuất" onAction="#handleLogout" />
