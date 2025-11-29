@@ -1,6 +1,7 @@
 # 🏪 StoreManager — Phần mềm quản lý cửa hàng (Java + MySQL)
 
-Tác giả: 
+Tác giả:
+
 **Phạm Ngọc Hưng** — MSSV: **20235342** 
 
 **Bùi Trung Hoàng** - MSSV: **20235333**
