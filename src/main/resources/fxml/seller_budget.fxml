@@ -7,37 +7,18 @@
     prefWidth="800" prefHeight="600">
 
     <top>
-        <BorderPane style="-fx-padding: 20; -fx-background-color: #16a085;">
-            <left>
-                <VBox spacing="5">
-                    <Label text="Quản lý Quỹ Ngân sách (Seller)"
-                        style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
-                    <Label fx:id="welcomeLabel"
-                        style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
-                    <Label fx:id="balanceLabel" text="Quỹ hiện tại: Loading..."
-                        style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
-                </VBox>
-            </left>
-            <right>
-                <VBox alignment="TOP_RIGHT">
-                    <Button text="✉ Gửi báo cáo cho Kế toán" onAction="#onSendReportToAccountant"
-                        style="-fx-background-color: rgba(255,255,255,0.3); -fx-text-fill: white; -fx-font-size: 12px; -fx-cursor: hand;" />
-                </VBox>
-            </right>
-        </BorderPane>
+        <VBox style="-fx-padding: 20; -fx-background-color: #16a085;">
+            <Label text="Quản lý Quỹ Ngân sách (Seller)"
+                style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
+            <Label fx:id="welcomeLabel"
+                style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
+            <Label fx:id="balanceLabel" text="Quỹ hiện tại: Loading..."
+                style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10 0 0 0;" />
+        </VBox>
     </top>
 
     <center>
         <VBox spacing="15" style="-fx-padding: 20;">
-
-            <!-- Report Menu Button (Separated) -->
-            <HBox alignment="CENTER_RIGHT">
-                <MenuButton text="Báo cáo" style="-fx-font-size: 14px;">
-                    <items>
-                        <MenuItem text="Báo cáo thu chi" onAction="#onReportIncomeExpense" />
-                    </items>
-                </MenuButton>
-            </HBox>
 
             <!-- Expense Recording Form -->
             <Label text="Ghi nhận Chi tiêu" style="-fx-font-size: 16px; -fx-font-weight: bold;" />

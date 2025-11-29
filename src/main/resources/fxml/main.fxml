@@ -57,6 +57,17 @@
                     maxWidth="Infinity" styleClass="md-button-primary" />
                 <Button fx:id="btnSellerBudget" text="Quỹ bán hàng" onAction="#openSellerBudget"
                     maxWidth="Infinity" styleClass="md-button-primary" />
+
+                <!-- New Report Button -->
+                <MenuButton fx:id="btnReports" text="Báo cáo" maxWidth="Infinity"
+                    styleClass="md-button-primary">
+                    <items>
+                        <MenuItem text="Báo cáo thu chi" onAction="#onReportIncomeExpense" />
+                        <MenuItem text="Gửi báo cáo cho kế toán"
+                            onAction="#onSendReportToAccountant" />
+                    </items>
+                </MenuButton>
+
                 <Button fx:id="btnUsers" text="Người dùng" onAction="#openUsers"
                     maxWidth="Infinity" styleClass="md-button-primary" />
             </children>

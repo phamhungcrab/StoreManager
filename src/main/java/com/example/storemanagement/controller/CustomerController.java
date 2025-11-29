@@ -35,29 +35,44 @@ import javafx.scene.layout.GridPane;
 public class CustomerController {
 
     // ====== KHAI BÁO CÁC THÀNH PHẦN TRONG FXML ======
-    @FXML private TextField customerSearchField; // ô nhập nội dung tìm kiếm
-    @FXML private Button searchCustomerBtn;      // nút tìm kiếm
-    @FXML private Button addCustomerBtn;         // nút thêm khách hàng
-    @FXML private Button editCustomerBtn;        // nút sửa khách hàng
-    @FXML private Button deleteCustomerBtn;      // nút xóa khách hàng
-    @FXML private Button refreshCustomersBtn;    // nút làm mới danh sách
+    @FXML
+    private TextField customerSearchField; // ô nhập nội dung tìm kiếm
+    @FXML
+    private Button searchCustomerBtn; // nút tìm kiếm
+    @FXML
+    private Button addCustomerBtn; // nút thêm khách hàng
+    @FXML
+    private Button editCustomerBtn; // nút sửa khách hàng
+    @FXML
+    private Button deleteCustomerBtn; // nút xóa khách hàng
+    @FXML
+    private Button refreshCustomersBtn; // nút làm mới danh sách
 
-    @FXML private TableView<Customer> customersTable; // bảng hiển thị khách hàng
-    @FXML private TableColumn<Customer, Long> colId;          // cột ID
-    @FXML private TableColumn<Customer, String> colName;      // cột tên
-    @FXML private TableColumn<Customer, String> colPhone;     // cột số điện thoại
-    @FXML private TableColumn<Customer, String> colEmail;     // cột email
-    @FXML private TableColumn<Customer, Integer> colPoints;   // cột điểm tích lũy
-    @FXML private TableColumn<Customer, String> colCreatedAt; // cột ngày tạo
+    @FXML
+    private TableView<Customer> customersTable; // bảng hiển thị khách hàng
+    @FXML
+    private TableColumn<Customer, Long> colId; // cột ID
+    @FXML
+    private TableColumn<Customer, String> colName; // cột tên
+    @FXML
+    private TableColumn<Customer, String> colPhone; // cột số điện thoại
+    @FXML
+    private TableColumn<Customer, String> colEmail; // cột email
+    @FXML
+    private TableColumn<Customer, Integer> colPoints; // cột điểm tích lũy
+    @FXML
+    private TableColumn<Customer, String> colCreatedAt; // cột ngày tạo
 
-    @FXML private Label customerStatusLabel;     // nhãn hiển thị số dòng / dòng chọn
-    @FXML private Pagination customerPagination; // điều khiển phân trang
+    @FXML
+    private Label customerStatusLabel; // nhãn hiển thị số dòng / dòng chọn
+    @FXML
+    private Pagination customerPagination; // điều khiển phân trang
 
     // ====== LOGIC NGHIỆP VỤ ======
     private final CustomerService customerService = new CustomerService(); // lớp xử lý dữ liệu khách hàng
-    private final int pageSize = 20;          // số bản ghi trên mỗi trang
-    private int currentPage = 1;              // trang hiện tại
-    private String currentKeyword = "";       // từ khóa tìm kiếm hiện tại
+    private final int pageSize = 20; // số bản ghi trên mỗi trang
+    private int currentPage = 1; // trang hiện tại
+    private String currentKeyword = ""; // từ khóa tìm kiếm hiện tại
 
     // ====== HÀM KHỞI TẠO GIAO DIỆN ======
     @FXML
@@ -78,20 +93,12 @@ public class CustomerController {
         // Khi người dùng chọn dòng khác ➜ cập nhật trạng thái
         customersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> updateStatus());
 
-        String role = Session.getRole();    //Kiểm tra vai trò người dùng
-        if (role == null || !role.equals("admin")) {
-            addCustomerBtn.setDisable(true);
-            editCustomerBtn.setDisable(true);
-            deleteCustomerBtn.setDisable(true);
-        }
-        
-
         // Gán hành động cho các nút
-        searchCustomerBtn.setOnAction(e -> doSearch(1));              // tìm kiếm mới
-        refreshCustomersBtn.setOnAction(e -> doSearch(currentPage));  // tải lại trang hiện tại
-        addCustomerBtn.setOnAction(e -> onAdd());                     // thêm
-        editCustomerBtn.setOnAction(e -> onEdit());                   // sửa
-        deleteCustomerBtn.setOnAction(e -> onDelete());               // xóa
+        searchCustomerBtn.setOnAction(e -> doSearch(1)); // tìm kiếm mới
+        refreshCustomersBtn.setOnAction(e -> doSearch(currentPage)); // tải lại trang hiện tại
+        addCustomerBtn.setOnAction(e -> onAdd()); // thêm
+        editCustomerBtn.setOnAction(e -> onEdit()); // sửa
+        deleteCustomerBtn.setOnAction(e -> onDelete()); // xóa
 
         // Lắng nghe thay đổi trang trong Pagination
         customerPagination.currentPageIndexProperty().addListener((obs, ov, nv) -> {
@@ -105,6 +112,7 @@ public class CustomerController {
 
     /**
      * Hàm tìm kiếm & phân trang khách hàng.
+     * 
      * @param page Số trang cần hiển thị
      */
     private void doSearch(int page) {
@@ -117,14 +125,14 @@ public class CustomerController {
 
             // Tính tổng số trang dựa trên pageSize
             int pageCount = Math.max(1, (int) Math.ceil(total / (double) pageSize));
-            customerPagination.setPageCount(pageCount);       // hiển thị số trang
-            currentPage = Math.min(page, pageCount);          // đảm bảo không vượt quá số trang
+            customerPagination.setPageCount(pageCount); // hiển thị số trang
+            currentPage = Math.min(page, pageCount); // đảm bảo không vượt quá số trang
             customerPagination.setCurrentPageIndex(currentPage - 1);
 
             // Lấy danh sách khách hàng cho trang hiện tại
             List<Customer> list = customerService.search(currentKeyword, currentPage, pageSize);
-            customersTable.getItems().setAll(list);           // hiển thị vào bảng
-            updateStatus();                                   // cập nhật thanh trạng thái
+            customersTable.getItems().setAll(list); // hiển thị vào bảng
+            updateStatus(); // cập nhật thanh trạng thái
         } catch (SQLException ex) {
             AlertUtils.error("Search failed", ex.getMessage()); // báo lỗi nếu truy vấn thất bại
         }
@@ -135,8 +143,8 @@ public class CustomerController {
      */
     private void onAdd() {
         Dialog<Customer> dlg = buildCustomerDialog(null); // tạo dialog trống
-        Optional<Customer> res = dlg.showAndWait();       // hiển thị dialog & chờ kết quả
-        res.ifPresent(c -> {                              // nếu người dùng bấm OK
+        Optional<Customer> res = dlg.showAndWait(); // hiển thị dialog & chờ kết quả
+        res.ifPresent(c -> { // nếu người dùng bấm OK
             try {
                 long id = customerService.createCustomer(c.getName(), c.getPhone(), c.getEmail());
                 AlertUtils.info("Created", "Đã tạo khách hàng #" + id);
@@ -158,14 +166,14 @@ public class CustomerController {
         }
 
         Dialog<Customer> dlg = buildCustomerDialog(sel); // tạo dialog với dữ liệu có sẵn
-        Optional<Customer> res = dlg.showAndWait();      // chờ kết quả
+        Optional<Customer> res = dlg.showAndWait(); // chờ kết quả
         res.ifPresent(c -> {
             try {
-                c.setId(sel.getId());            // giữ nguyên ID cũ
-                c.setPoints(sel.getPoints());    // không chỉnh điểm trong dialog này
+                c.setId(sel.getId()); // giữ nguyên ID cũ
+                c.setPoints(sel.getPoints()); // không chỉnh điểm trong dialog này
                 customerService.updateCustomer(c);
                 AlertUtils.info("Updated", "Đã cập nhật khách hàng #" + sel.getId());
-                doSearch(currentPage);           // tải lại trang hiện tại
+                doSearch(currentPage); // tải lại trang hiện tại
             } catch (Exception ex) {
                 AlertUtils.error("Update failed", ex.getMessage());
             }
@@ -183,7 +191,8 @@ public class CustomerController {
         }
 
         // Hỏi xác nhận người dùng trước khi xóa
-        if (!AlertUtils.confirm("Xác nhận", "Xoá khách hàng '" + sel.getName() + "'?")) return;
+        if (!AlertUtils.confirm("Xác nhận", "Xoá khách hàng '" + sel.getName() + "'?"))
+            return;
 
         try {
             customerService.deleteCustomer(sel.getId());
@@ -195,7 +204,8 @@ public class CustomerController {
 
     /**
      * Tạo hộp thoại nhập thông tin khách hàng (thêm/sửa).
-     * @param init  dữ liệu ban đầu (null nếu thêm mới)
+     * 
+     * @param init dữ liệu ban đầu (null nếu thêm mới)
      */
     private Dialog<Customer> buildCustomerDialog(Customer init) {
         Dialog<Customer> d = new Dialog<>();
@@ -209,7 +219,8 @@ public class CustomerController {
 
         // Tạo layout dạng lưới để sắp xếp các nhãn và ô nhập
         GridPane gp = new GridPane();
-        gp.setHgap(8); gp.setVgap(8);
+        gp.setHgap(8);
+        gp.setVgap(8);
         gp.addRow(0, new Label("Name"), tfName);
         gp.addRow(1, new Label("Phone"), tfPhone);
         gp.addRow(2, new Label("Email"), tfEmail);
@@ -234,7 +245,7 @@ public class CustomerController {
      */
     private void updateStatus() {
         int selected = customersTable.getSelectionModel().getSelectedIndices().size(); // số dòng được chọn
-        int total = customersTable.getItems().size();                                  // tổng số dòng hiển thị
+        int total = customersTable.getItems().size(); // tổng số dòng hiển thị
         customerStatusLabel.setText(selected + " selected • " + total + " item(s)");
     }
 }

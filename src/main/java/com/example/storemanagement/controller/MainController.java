@@ -54,6 +54,8 @@ public class MainController {
     private Button btnAccountant;
     @FXML
     private Button btnSellerBudget;
+    @FXML
+    private javafx.scene.control.MenuButton btnReports;
 
     private MediaPlayer mediaPlayer;
     private boolean musicPlaying = false;
@@ -127,6 +129,23 @@ public class MainController {
             btnSellerBudget.setVisible(isAdmin || isSeller);
             btnSellerBudget.setManaged(isAdmin || isSeller);
         }
+
+        if (btnReports != null) {
+            btnReports.setVisible(isAdmin || isSeller);
+            btnReports.setManaged(isAdmin || isSeller);
+        }
+    }
+
+    @FXML
+    private void onReportIncomeExpense() {
+        showAlert(Alert.AlertType.INFORMATION, "Tính năng đang phát triển",
+                "Chức năng Báo cáo thu chi đang được xây dựng.");
+    }
+
+    @FXML
+    private void onSendReportToAccountant() {
+        showAlert(Alert.AlertType.INFORMATION, "Tính năng đang phát triển",
+                "Chức năng Gửi báo cáo cho kế toán đang được xây dựng.");
     }
 
     @FXML
