@@ -1,0 +1,94 @@
+@startuml
+' Biểu đồ lớp cho tầng Service/DAO
+skinparam linetype ortho
+left to right direction
+
+package Services {
+  class CustomerService
+  class OrderService
+  class InventoryService
+  class FinanceService
+  class SupplierService
+}
+
+package DAOs {
+  class CustomerDAO
+  class OrderDAO
+  class ProductDAO
+  class FinanceDAO
+  class SupplierDAO
+  class SupplierDebtDAO
+  class SupplierProductPriceDAO
+  class BudgetAllocationDAO
+  class BudgetExpenseDAO
+  class OrderEventDAO
+  class StoreDAO
+  class UserDAO
+  class DBConnection
+}
+
+package Models {
+  class Customer
+  class Order
+  class OrderItem
+  class Product
+  class FinanceReport
+  class Supplier
+  class SupplierProductPrice
+  class OrderEvent
+  class Store
+  class User
+}
+
+CustomerService --> CustomerDAO
+CustomerDAO ..> DBConnection
+CustomerDAO --> Customer
+
+OrderService --> OrderDAO
+OrderService ..> DBConnection
+OrderDAO ..> DBConnection
+OrderDAO --> Order
+OrderDAO --> OrderItem
+OrderDAO --> OrderEvent
+
+InventoryService --> ProductDAO
+InventoryService ..> DBConnection
+ProductDAO ..> DBConnection
+ProductDAO --> Product
+ProductDAO --> Supplier
+ProductDAO --> Store
+
+FinanceService --> FinanceDAO
+FinanceDAO ..> DBConnection
+FinanceDAO --> FinanceReport
+FinanceDAO --> Store
+
+SupplierService ..> DBConnection
+SupplierService --> Supplier
+
+SupplierDAO ..> DBConnection
+SupplierDAO --> Supplier
+SupplierDAO --> SupplierProductPriceDAO
+SupplierDAO --> SupplierDebtDAO
+SupplierDAO --> BudgetAllocationDAO
+SupplierDAO --> BudgetExpenseDAO
+
+SupplierProductPriceDAO ..> DBConnection
+SupplierProductPriceDAO --> SupplierProductPrice
+
+SupplierDebtDAO ..> DBConnection
+SupplierDebtDAO --> Supplier
+
+BudgetAllocationDAO ..> DBConnection
+BudgetExpenseDAO ..> DBConnection
+
+OrderEventDAO ..> DBConnection
+OrderEventDAO --> OrderEvent
+
+UserDAO ..> DBConnection
+UserDAO --> User
+
+StoreDAO ..> DBConnection
+StoreDAO --> Store
+
+@enduml
