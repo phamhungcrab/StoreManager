@@ -1,0 +1,89 @@
+%% Sơ đồ lớp tổng quan (Mermaid)
+classDiagram
+  direction LR
+
+  %% App & Session
+  class Main
+  class Session
+  class DBConnection
+
+  %% Controllers
+  class LoginController
+  class MainController
+  class CustomerController
+  class OrderController
+  class InventoryController
+  class FinanceController
+  class LogisticsController
+  class UserController
+
+  %% Services
+  class CustomerService
+  class OrderService
+  class InventoryService
+  class FinanceService
+  class SupplierService
+
+  %% DAOs
+  class CustomerDAO
+  class OrderDAO
+  class ProductDAO
+  class FinanceDAO
+  class SupplierDAO
+  class UserDAO
+
+  %% Domain Models
+  class Customer
+  class Order
+  class OrderItem
+  class Product
+  class Supplier
+  class Store
+
+  %% Startup & session flow
+  Main --> LoginController : load login
+  Main --> MainController : load home
+  LoginController --> Session : lưu phiên
+  MainController --> Session
+
+  %% Controller to service/dao
+  CustomerController --> CustomerService
+  OrderController --> OrderService
+  InventoryController --> InventoryService
+  FinanceController --> FinanceService
+  LogisticsController --> InventoryService
+  UserController --> UserDAO
+  LoginController --> UserDAO : kiểm tra tài khoản
+
+  %% Service to DAO
+  CustomerService --> CustomerDAO
+  OrderService --> OrderDAO
+  InventoryService --> ProductDAO
+  FinanceService --> FinanceDAO
+  SupplierService --> SupplierDAO
+
+  %% DAO to DB
+  CustomerDAO ..> DBConnection
+  OrderDAO ..> DBConnection
+  ProductDAO ..> DBConnection
+  FinanceDAO ..> DBConnection
+  SupplierDAO ..> DBConnection
+  UserDAO ..> DBConnection
+
+  %% DAO to models
+  CustomerDAO --> Customer
+  OrderDAO --> Order
+  OrderDAO --> OrderItem
+  OrderDAO --> Store
+  ProductDAO --> Product
+  ProductDAO --> Supplier
+  ProductDAO --> Store
+  FinanceDAO --> Store
+  SupplierDAO --> Supplier
+
+  %% Model relations
+  Order --> OrderItem : chứa
+  OrderItem --> Product : tham chiếu SKU
+  Order --> Customer : khách đặt
+  Order --> Store : cửa hàng
+  Product --> Supplier : nhà cung cấp

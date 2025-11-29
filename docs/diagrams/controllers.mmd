@@ -1,0 +1,79 @@
+%% Sơ đồ lớp Controller (Mermaid)
+classDiagram
+  direction LR
+
+  %% Controllers
+  class LoginController
+  class RegisterController
+  class MainController
+  class CustomerController
+  class OrderController
+  class OrderLogController
+  class InventoryController
+  class LogisticsController
+  class FinanceController
+  class SellerBudgetController
+  class AccountantController
+  class UserController
+
+  %% Services & DAO (điểm tựa chính)
+  class CustomerService
+  class OrderService
+  class InventoryService
+  class FinanceService
+  class SupplierService
+  class UserDAO
+  class DBConnection
+
+  %% Utilities / Session
+  class AlertUtils
+  class DateUtils
+  class PasswordUtils
+  class Session
+
+  %% Đăng nhập/đăng ký
+  LoginController --> PasswordUtils
+  LoginController --> Session
+  LoginController --> UserDAO
+  LoginController --> DBConnection
+  RegisterController --> PasswordUtils
+  RegisterController --> UserDAO
+
+  %% Màn hình chính & tiện ích
+  MainController --> Session
+  MainController --> AlertUtils
+
+  %% Quản lý khách hàng & đơn hàng
+  CustomerController --> CustomerService
+  CustomerController --> AlertUtils
+  CustomerController --> DateUtils
+  CustomerController --> Session
+
+  OrderController --> OrderService
+  OrderController --> AlertUtils
+  OrderController --> Session
+  OrderLogController --> DBConnection
+
+  %% Kho, vận chuyển
+  InventoryController --> InventoryService
+  InventoryController --> DBConnection
+  InventoryController --> Session
+  LogisticsController --> InventoryService
+  LogisticsController --> DBConnection
+  LogisticsController --> Session
+
+  %% Tài chính
+  FinanceController --> FinanceService
+  FinanceController --> Session
+  SellerBudgetController --> SupplierService
+  SellerBudgetController --> Session
+  AccountantController --> SupplierService
+  AccountantController --> InventoryService
+  AccountantController --> FinanceService
+  AccountantController --> Session
+  AccountantController --> AlertUtils
+
+  %% Người dùng
+  UserController --> UserDAO
+  UserController --> PasswordUtils
+  UserController --> Session

@@ -1,0 +1,88 @@
+%% Sơ đồ Service/DAO (Mermaid)
+classDiagram
+  direction LR
+
+  %% Services
+  class CustomerService
+  class OrderService
+  class InventoryService
+  class FinanceService
+  class SupplierService
+
+  %% DAOs
+  class CustomerDAO
+  class OrderDAO
+  class ProductDAO
+  class FinanceDAO
+  class SupplierDAO
+  class SupplierDebtDAO
+  class SupplierProductPriceDAO
+  class BudgetAllocationDAO
+  class BudgetExpenseDAO
+  class OrderEventDAO
+  class StoreDAO
+  class UserDAO
+  class DBConnection
+
+  %% Models
+  class Customer
+  class Order
+  class OrderItem
+  class Product
+  class FinanceReport
+  class Supplier
+  class SupplierProductPrice
+  class OrderEvent
+  class Store
+  class User
+
+  %% Service -> DAO
+  CustomerService --> CustomerDAO
+  OrderService --> OrderDAO
+  InventoryService --> ProductDAO
+  FinanceService --> FinanceDAO
+  SupplierService --> SupplierDAO
+
+  %% DAO -> DBConnection
+  CustomerDAO ..> DBConnection
+  OrderDAO ..> DBConnection
+  ProductDAO ..> DBConnection
+  FinanceDAO ..> DBConnection
+  SupplierDAO ..> DBConnection
+  SupplierDebtDAO ..> DBConnection
+  SupplierProductPriceDAO ..> DBConnection
+  BudgetAllocationDAO ..> DBConnection
+  BudgetExpenseDAO ..> DBConnection
+  OrderEventDAO ..> DBConnection
+  StoreDAO ..> DBConnection
+  UserDAO ..> DBConnection
+
+  %% DAO -> Models
+  CustomerDAO --> Customer
+  OrderDAO --> Order
+  OrderDAO --> OrderItem
+  OrderDAO --> OrderEvent
+  OrderDAO --> Store
+  ProductDAO --> Product
+  ProductDAO --> Supplier
+  ProductDAO --> Store
+  FinanceDAO --> FinanceReport
+  FinanceDAO --> Store
+  SupplierDAO --> Supplier
+  SupplierDAO --> SupplierProductPriceDAO
+  SupplierDAO --> SupplierDebtDAO
+  SupplierDAO --> BudgetAllocationDAO
+  SupplierDAO --> BudgetExpenseDAO
+  SupplierProductPriceDAO --> SupplierProductPrice
+  SupplierDebtDAO --> Supplier
+  BudgetAllocationDAO --> Store
+  BudgetExpenseDAO --> Store
+  OrderEventDAO --> OrderEvent
+  UserDAO --> User
+  StoreDAO --> Store
+
+  %% Model relations (lược giản để rõ hướng)
+  Order --> OrderItem : chứa
+  OrderItem --> Product
+  SupplierProductPrice --> Supplier
+  SupplierProductPrice --> Product
