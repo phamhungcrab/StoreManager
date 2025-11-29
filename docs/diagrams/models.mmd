@@ -1,0 +1,29 @@
+%% Quan hệ Model (Mermaid)
+classDiagram
+  direction LR
+
+  class Customer
+  class Order
+  class OrderItem
+  class OrderEvent
+  class Product
+  class Supplier
+  class SupplierProductPrice
+  class Store
+  class FinanceReport
+  class PointsLedger
+  class User
+
+  Order *-- OrderItem : chứa dòng hàng
+  Order --> Customer : khách đặt
+  Order --> Store : cửa hàng
+  Order --> OrderEvent : lifecycle
+  OrderItem --> Product : SKU
+
+  SupplierProductPrice --> Supplier : báo giá bởi
+  SupplierProductPrice --> Product : báo giá cho
+  Product --> Supplier : nhà cung cấp chính
+
+  FinanceReport --> Store : theo cửa hàng
+  PointsLedger --> Customer : cộng/trừ điểm
+  User --> Store : gán vào cửa hàng

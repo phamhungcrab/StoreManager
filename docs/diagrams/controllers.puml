@@ -1,0 +1,88 @@
+@startuml
+' Biểu đồ lớp cho tầng Controller (JavaFX)
+skinparam linetype ortho
+left to right direction
+
+package Controllers {
+  class LoginController
+  class RegisterController
+  class MainController
+  class CustomerController
+  class OrderController
+  class OrderLogController
+  class InventoryController
+  class LogisticsController
+  class FinanceController
+  class SellerBudgetController
+  class AccountantController
+  class UserController
+}
+
+package Services {
+  class CustomerService
+  class OrderService
+  class InventoryService
+  class FinanceService
+  class SupplierService
+}
+
+package DirectDAO {
+  class UserDAO
+  class DBConnection
+}
+
+package Utilities {
+  class AlertUtils
+  class DateUtils
+  class PasswordUtils
+  class Session
+}
+
+LoginController ..> PasswordUtils
+LoginController ..> Session
+LoginController ..> DBConnection
+
+RegisterController ..> PasswordUtils
+RegisterController ..> DBConnection
+
+MainController ..> Session
+MainController ..> AlertUtils
+
+CustomerController ..> CustomerService
+CustomerController ..> AlertUtils
+CustomerController ..> DateUtils
+CustomerController ..> Session
+
+OrderController ..> OrderService
+OrderController ..> AlertUtils
+OrderController ..> DBConnection
+OrderController ..> Session
+OrderLogController ..> DBConnection
+
+InventoryController ..> InventoryService
+InventoryController ..> DBConnection
+InventoryController ..> Session
+LogisticsController ..> InventoryService
+LogisticsController ..> DBConnection
+LogisticsController ..> Session
+
+FinanceController ..> FinanceService
+FinanceController ..> Session
+
+SellerBudgetController ..> SupplierService
+SellerBudgetController ..> Session
+AccountantController ..> SupplierService
+AccountantController ..> InventoryService
+AccountantController ..> FinanceService
+AccountantController ..> Session
+AccountantController ..> AlertUtils
+
+UserController ..> UserDAO
+UserController ..> PasswordUtils
+UserController ..> Session
+
+Controllers --> Services : xử lý nghiệp vụ chính
+Controllers --> Utilities : tiện ích/phiên đăng nhập
+Controllers --> DirectDAO : truy vấn trực tiếp khi cần
+
+@enduml
