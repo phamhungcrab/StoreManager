@@ -1,6 +1,7 @@
 # 🏪 StoreManager — Phần mềm quản lý cửa hàng (Java + MySQL)
 
-Tác giả: **Phạm Ngọc Hưng** & **Bùi Trung Hoàng** — MSSV: **20235342**
+Tác giả: **Phạm Ngọc Hưng** — MSSV: **20235342** 
+         **Bùi Trung Hoàng** - MSSV: **20235333**
 
 Giảng viên hướng dẫn: **Trịnh Thành Trung**
 
@@ -233,27 +234,3 @@ mvn -Dexec.mainClass="com.example.storemanagement.Main" -Dexec.args="--module-pa
 - Notifications: tích hợp email / SMS khi đơn mới hoặc báo cáo
 - Multi-tenant & multi-store orchestration, đồng bộ kho theo cửa hàng
 - Internationalization (i18n) — hỗ trợ đa ngôn ngữ
-
-Nếu bạn muốn, tôi có thể tạo task list cụ thể để hiện thực từng mục phía trên.
-
----
-
----
-
-📅 **Tác giả:** Phạm Ngọc Hưng — MSSV: 20235342
-
-Giảng viên: **Trịnh Thành Trung**
-
-Giáo viên phản biện: **Bùi Thị Mai Anh**
-
----
-
-Nếu cần, tôi có thể:
-
-- bổ sung sơ đồ ERD trực tiếp vào README (thêm ảnh),
-- viết hướng dẫn chi tiết pack/unpack cho macOS (code signing) và Windows (exe/graalvm native-image),
-- hoặc tạo sẵn một script (PowerShell / bash) để tự động cấu hình môi trường dev cho sinh viên.
-
-Mình đã cập nhật README theo yêu cầu — bước tiếp theo tôi sẽ mở file đã chỉnh sửa để rà soát và hoàn thiện ngôn ngữ/định dạng nếu bạn muốn thay đổi thêm.
-
----
