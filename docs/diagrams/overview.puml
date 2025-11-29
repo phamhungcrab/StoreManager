@@ -1,0 +1,81 @@
+@startuml
+' Biểu đồ tổng quan lớp chính của ứng dụng
+skinparam linetype ortho
+skinparam defaultTextAlignment center
+
+package "App & Session" {
+  class Main
+  class Session
+}
+
+package "Utilities" {
+  class AlertUtils
+  class DateUtils
+  class PasswordUtils
+}
+
+package "Controllers" {
+  class LoginController
+  class MainController
+  class CustomerController
+  class OrderController
+  class InventoryController
+  class FinanceController
+  class LogisticsController
+  class SellerBudgetController
+  class AccountantController
+  class UserController
+  class RegisterController
+}
+
+package "Services" {
+  class CustomerService
+  class OrderService
+  class InventoryService
+  class FinanceService
+  class SupplierService
+}
+
+package "DAOs" {
+  class DBConnection
+  class CustomerDAO
+  class OrderDAO
+  class ProductDAO
+  class FinanceDAO
+  class SupplierDAO
+  class UserDAO
+}
+
+package "Domain Models" {
+  class Customer
+  class Order
+  class OrderItem
+  class Product
+  class Supplier
+  class Store
+}
+
+Main --> LoginController : load FXML / khởi động UI
+Main --> MainController : load màn hình chính
+
+LoginController ..> PasswordUtils
+LoginController ..> Session
+
+MainController ..> Session
+MainController ..> AlertUtils
+
+Controllers ..> Services : thao tác nghiệp vụ
+Controllers ..> Utilities
+Controllers ..> Session
+
+Services ..> DAOs : gọi truy vấn
+DAOs ..> DBConnection : singleton
+DAOs --> Domain Models : map dữ liệu
+
+Order --> OrderItem : contains
+OrderItem --> Product : references
+Product --> Supplier : belongs to
+Order --> Customer : belongs to
+Order --> Store : thuộc cửa hàng
+
+@enduml
